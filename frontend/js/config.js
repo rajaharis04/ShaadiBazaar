@@ -7,7 +7,7 @@ const SUPABASE_URL = 'https://tvaasweoknmymxfbgvix.supabase.co';       // e.g. h
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR2YWFzd2Vva25teW14ZmJndml4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzNzUwOTEsImV4cCI6MjA5Njk1MTA5MX0.4SifqADtMsMvvmUx5XCoYgeoh5HD57UovnRlXBs71-k';  // from Project Settings > API
 
 // Backend API base URL
-const API_BASE = 'http://localhost:5000/api';  // Change to Render URL for production
+const API_BASE = 'https://shaadibazaar-production.up.railway.app/api';  // Change to Render URL for production
 
 // ============================================================
 // Initialize Supabase Client
@@ -16,7 +16,7 @@ const { createClient } = supabase;
 const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON);
 
 // Automatically set session on supabaseClient if token is present
-(function() {
+(function () {
   const token = localStorage.getItem('sb_token');
   if (token) {
     supabaseClient.auth.setSession({
@@ -225,14 +225,14 @@ function updateNavbar() {
     if (loginBtn) loginBtn.style.display = 'none';
     if (logoutBtn) logoutBtn.style.display = 'flex';
     if (dashLink) dashLink.style.display = 'inline-flex';
-    
+
     // Point brand logo to dashboard when logged in
     if (brandLink) {
       brandLink.href = user.role === 'admin'
         ? (isAdminDir ? 'admin-dashboard.html' : 'admin/admin-dashboard.html')
         : (isAdminDir ? '../dashboard.html' : 'dashboard.html');
     }
-    
+
     // Hide Home link when logged in
     if (homeLink) homeLink.parentElement.style.display = 'none';
 
@@ -244,7 +244,7 @@ function updateNavbar() {
     if (loginBtn) loginBtn.style.display = 'inline-flex';
     if (logoutBtn) logoutBtn.style.display = 'none';
     if (dashLink) dashLink.style.display = 'none';
-    
+
     if (brandLink) brandLink.href = isAdminDir ? '../index.html' : 'index.html';
     if (homeLink) homeLink.parentElement.style.display = 'block';
 
@@ -280,7 +280,7 @@ document.addEventListener('DOMContentLoaded', () => {
 async function logout() {
   try {
     await apiCall('/auth/logout', { method: 'POST' });
-  } catch (_) {}
+  } catch (_) { }
 
   localStorage.removeItem('sb_token');
   localStorage.removeItem('sb_user');
@@ -293,7 +293,7 @@ async function logout() {
 }
 
 // Automatically redirect logged-in users away from the public landing page to their dashboard
-(function() {
+(function () {
   const path = window.location.pathname;
   const isLandingPage = path.endsWith('index.html') || path === '/' || path.endsWith('/');
   if (isLandingPage) {
