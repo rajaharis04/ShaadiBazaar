@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Detail — Shaadi Bazaar</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/products.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body data-page="product-detail">
+
+<nav class="navbar">
+  <div class="container">
+    <a href="index.html" class="navbar-brand"><span class="brand-name">Shaadi Bazaar</span></a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="products.html" class="active">Products</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="dashboard.html" id="nav-dashboard-link" style="display:none">Dashboard</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="cart.html" class="nav-cart-btn">Cart<span class="cart-badge" style="display:none">0</span></a>
+      <a href="auth.html" class="btn-nav-login" id="nav-login-btn">Login</a>
+      <button class="btn-nav-login" id="nav-logout-btn" style="display:none;background:transparent;border:1px solid var(--gold);color:var(--gold)">Logout</button>
+    </div>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<main>
+<div class="page-header">
+  <div class="container">
+    <h1 id="product-name">Loading...</h1>
+    <div class="breadcrumb">
+      <a href="index.html">Home</a> ›
+      <a href="products.html">Products</a> ›
+      <span id="breadcrumb-name">Product</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="product-detail-section">
+    <div class="product-detail-grid" id="product-detail-container">
+      <!-- Image Column -->
+      <div class="product-images">
+        <img id="product-img" src="https://via.placeholder.com/600x450" alt="Product" class="main-image">
+      </div>
+
+      <!-- Info Column -->
+      <div class="product-info">
+        <div class="product-category-tag" id="product-category">Loading...</div>
+        <div class="product-rating-row">
+          <div class="stars">★★★★★</div>
+          <span class="review-count">(New)</span>
+        </div>
+        <div class="product-detail-price" id="product-price">Rs. 0</div>
+        <div class="stock-status in-stock" id="product-stock">In Stock</div>
+        <p class="product-detail-desc" id="product-desc">Loading...</p>
+
+        <div class="quantity-selector">
+          <button class="qty-btn" id="qty-minus">−</button>
+          <span class="qty-display" id="qty-display">1</span>
+          <button class="qty-btn" id="qty-plus">+</button>
+        </div>
+
+        <div class="product-detail-actions">
+          <button class="btn btn-gold btn-lg" id="add-to-cart-btn">Add to Cart</button>
+          <a href="cart.html" class="btn btn-primary btn-lg">Checkout Now →</a>
+        </div>
+
+        <table class="product-meta-table">
+          <tr><td>Category</td><td id="product-category-meta">—</td></tr>
+          <tr><td>Availability</td><td>Ships within 3–5 days</td></tr>
+          <tr><td>Return Policy</td><td>7-day easy returns</td></tr>
+          <tr><td>Payment</td><td>JazzCash · Easypaisa · COD</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- Reviews Section -->
+    <div class="reviews-section">
+      <div class="flex-between mb-3">
+        <h2>Customer Reviews (<span id="reviews-count">0</span>)</h2>
+      </div>
+      <div class="reviews-grid" id="reviews-grid">
+        <!-- Loaded via JS -->
+      </div>
+
+      <!-- Write Review Form -->
+      <div class="write-review-form">
+        <h3 style="margin-bottom:1rem">Write a Review</h3>
+        <form id="review-form">
+          <div class="form-group">
+            <label class="form-label">Your Rating</label>
+            <div class="star-rating-input">
+              <input type="radio" name="rating" id="star5" value="5"><label for="star5">★</label>
+              <input type="radio" name="rating" id="star4" value="4"><label for="star4">★</label>
+              <input type="radio" name="rating" id="star3" value="3"><label for="star3">★</label>
+              <input type="radio" name="rating" id="star2" value="2"><label for="star2">★</label>
+              <input type="radio" name="rating" id="star1" value="1"><label for="star1">★</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Your Review</label>
+            <textarea id="review-comment" class="form-control" rows="4" placeholder="Share your experience..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Submit Review</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom" style="border-top:none;padding-top:0">
+      <p>© 2024 Shaadi Bazaar</p>
+    </div>
+  </div>
+</footer>
+
+<div class="toast-container"></div>
+<script src="js/config.js"></script>
+<script src="js/products.js"></script>
+</body>
+</html>

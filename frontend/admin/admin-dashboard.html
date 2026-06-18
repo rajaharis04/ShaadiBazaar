@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel — Shaadi Bazaar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* =====================================================
+       ADMIN PANEL — Professional, Clean, Site-Theme
+       ===================================================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --maroon:       #8B0000;
+      --maroon-dark:  #5C0000;
+      --maroon-light: #B22222;
+      --gold:         #D4AF37;
+      --gold-dark:    #B8960C;
+      --cream:        #FFF8F0;
+      --cream-dark:   #F5E6D0;
+      --white:        #FFFFFF;
+      --black:        #1A0A00;
+      --gray-50:      #FAFAFA;
+      --gray-100:     #F9F3EC;
+      --gray-200:     #EDE0D4;
+      --gray-300:     #D4C4B5;
+      --gray-500:     #9E8B7D;
+      --gray-700:     #5D4E42;
+      --success:      #2D6A4F;
+      --warning:      #D4861F;
+      --danger:       #C0392B;
+      --info:         #1A5276;
+      --font-h:       'Playfair Display', Georgia, serif;
+      --font-b:       'Poppins', system-ui, sans-serif;
+      --radius:       10px;
+      --shadow:       0 2px 12px rgba(139,0,0,0.1);
+      --shadow-md:    0 4px 24px rgba(139,0,0,0.15);
+      --sidebar-w:    240px;
+      --topbar-h:     60px;
+      --transition:   0.2s ease;
+    }
+
+    body { font-family: var(--font-b); background: var(--gray-100); color: var(--black); min-height: 100vh; }
+
+    /* =====================================================
+       TOPBAR
+       ===================================================== */
+    .topbar {
+      position: fixed; top: 0; left: 0; right: 0;
+      height: var(--topbar-h);
+      background: var(--maroon-dark);
+      display: flex; align-items: center;
+      padding: 0 20px 0 calc(var(--sidebar-w) + 20px);
+      z-index: 100;
+      border-bottom: 2px solid var(--gold);
+      gap: 12px;
+    }
+    .topbar-title { font-family: var(--font-h); font-size: 1rem; color: var(--gold); flex: 1; }
+    .topbar-date  { font-size: 0.78rem; color: rgba(255,248,240,0.6); }
+    .topbar-user  {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 0.8rem; color: rgba(255,248,240,0.8);
+    }
+    .topbar-avatar {
+      width: 30px; height: 30px; border-radius: 50%;
+      background: var(--gold); color: var(--maroon-dark);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.75rem;
+    }
+    .view-site-btn {
+      padding: 5px 12px;
+      background: rgba(212,175,55,0.15);
+      border: 1px solid rgba(212,175,55,0.4);
+      border-radius: 6px;
+      color: var(--gold);
+      font-size: 0.75rem; font-weight: 600;
+      text-decoration: none; font-family: var(--font-b);
+      transition: var(--transition);
+    }
+    .view-site-btn:hover { background: rgba(212,175,55,0.25); }
+
+    /* =====================================================
+       SIDEBAR
+       ===================================================== */
+    .sidebar {
+      position: fixed; top: 0; left: 0; bottom: 0;
+      width: var(--sidebar-w);
+      background: var(--maroon-dark);
+      display: flex; flex-direction: column;
+      z-index: 200;
+      border-right: 2px solid rgba(212,175,55,0.2);
+    }
+    .sidebar-brand {
+      height: var(--topbar-h);
+      display: flex; align-items: center;
+      padding: 0 20px;
+      border-bottom: 2px solid rgba(212,175,55,0.2);
+      gap: 10px;
+    }
+    .sidebar-brand-text { font-family: var(--font-h); font-size: 1rem; color: var(--gold); line-height: 1.2; }
+    .sidebar-brand-sub  { font-size: 0.65rem; color: rgba(255,248,240,0.5); }
+    .sidebar-scroll { flex: 1; overflow-y: auto; padding: 16px 10px; }
+    .nav-section { margin-bottom: 6px; }
+    .nav-section-label {
+      font-size: 0.6rem; font-weight: 700; letter-spacing: 1.2px;
+      text-transform: uppercase; color: rgba(212,175,55,0.5);
+      padding: 8px 10px 4px; display: block;
+    }
+    .nav-btn {
+      display: flex; align-items: center; gap: 9px;
+      width: 100%; padding: 9px 12px;
+      border-radius: 8px; border: none;
+      background: transparent; color: rgba(255,248,240,0.65);
+      font-family: var(--font-b); font-size: 0.83rem; font-weight: 500;
+      cursor: pointer; transition: var(--transition); text-align: left;
+    }
+    .nav-btn svg { width: 15px; height: 15px; flex-shrink: 0; }
+    .nav-btn:hover { background: rgba(255,248,240,0.07); color: var(--cream); }
+    .nav-btn.active { background: rgba(212,175,55,0.15); color: var(--gold); font-weight: 600; border: 1px solid rgba(212,175,55,0.2); }
+    .nav-btn.active svg { color: var(--gold); }
+    .sidebar-footer { padding: 12px 10px; border-top: 1px solid rgba(212,175,55,0.15); }
+    .logout-nav-btn {
+      display: flex; align-items: center; gap: 9px;
+      width: 100%; padding: 9px 12px;
+      border-radius: 8px; border: 1px solid rgba(224,85,85,0.3);
+      background: transparent; color: rgba(224,130,130,0.85);
+      font-family: var(--font-b); font-size: 0.83rem; font-weight: 600;
+      cursor: pointer; transition: var(--transition);
+    }
+    .logout-nav-btn:hover { background: rgba(192,57,43,0.12); color: #e08585; }
+    .logout-nav-btn svg { width: 15px; height: 15px; }
+
+    /* =====================================================
+       MAIN CONTENT
+       ===================================================== */
+    .main {
+      margin-left: var(--sidebar-w);
+      padding-top: var(--topbar-h);
+      min-height: 100vh;
+    }
+    .content { padding: 24px; max-width: 1100px; }
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* =====================================================
+       PAGE HEADER
+       ===================================================== */
+    .page-hdr { margin-bottom: 20px; }
+    .page-hdr h2 { font-family: var(--font-h); font-size: 1.4rem; color: var(--maroon-dark); margin-bottom: 3px; }
+    .page-hdr p  { font-size: 0.8rem; color: var(--gray-500); }
+    .page-hdr-row { display: flex; align-items: flex-end; justify-content: space-between; }
+
+    /* =====================================================
+       STAT CARDS
+       ===================================================== */
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 24px; }
+    .stat-card {
+      background: var(--white); border-radius: var(--radius);
+      padding: 18px 20px; display: flex; align-items: center; gap: 14px;
+      box-shadow: var(--shadow); border: 1px solid var(--gray-200);
+      transition: var(--transition);
+    }
+    .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+    .stat-ico {
+      width: 46px; height: 46px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .stat-ico.m { background: rgba(139,0,0,0.08); }
+    .stat-ico.g { background: rgba(212,175,55,0.12); }
+    .stat-ico.s { background: rgba(45,106,79,0.08); }
+    .stat-ico.b { background: rgba(26,82,118,0.08); }
+    .stat-ico svg { width: 22px; height: 22px; }
+    .stat-ico.m svg { color: var(--maroon); }
+    .stat-ico.g svg { color: var(--gold-dark); }
+    .stat-ico.s svg { color: var(--success); }
+    .stat-ico.b svg { color: var(--info); }
+    .stat-val { font-family: var(--font-h); font-size: 1.6rem; font-weight: 700; color: var(--maroon-dark); line-height: 1; }
+    .stat-lbl { font-size: 0.72rem; color: var(--gray-500); margin-top: 2px; }
+
+    /* =====================================================
+       QUICK ACTIONS
+       ===================================================== */
+    .quick-row { display: flex; gap: 10px; margin-bottom: 24px; flex-wrap: wrap; }
+    .q-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 9px 16px;
+      background: var(--maroon); color: var(--gold);
+      border: none; border-radius: 8px; font-family: var(--font-b);
+      font-size: 0.82rem; font-weight: 600; cursor: pointer;
+      transition: var(--transition); text-decoration: none;
+    }
+    .q-btn:hover { background: var(--maroon-light); transform: translateY(-1px); }
+    .q-btn.outline { background: transparent; border: 1.5px solid var(--maroon); color: var(--maroon); }
+    .q-btn.outline:hover { background: var(--maroon); color: var(--gold); }
+    .q-btn svg { width: 14px; height: 14px; }
+
+    /* =====================================================
+       TABLE CARD
+       ===================================================== */
+    .table-card {
+      background: var(--white); border-radius: var(--radius);
+      border: 1px solid var(--gray-200); box-shadow: var(--shadow);
+      overflow: hidden; margin-bottom: 20px;
+    }
+    .table-card-hdr {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 18px; border-bottom: 1px solid var(--gray-200);
+      background: var(--gray-50);
+    }
+    .table-card-hdr h3 { font-family: var(--font-h); font-size: 1rem; color: var(--maroon-dark); }
+    .table-card-hdr p  { font-size: 0.75rem; color: var(--gray-500); margin-top: 1px; }
+    .table-toolbar {
+      display: flex; align-items: center; gap: 10px; padding: 12px 18px;
+      border-bottom: 1px solid var(--gray-200); background: var(--gray-50);
+      flex-wrap: wrap;
+    }
+    .search-input {
+      flex: 1; min-width: 180px;
+      padding: 7px 12px;
+      border: 1.5px solid var(--gray-200); border-radius: 7px;
+      font-family: var(--font-b); font-size: 0.82rem; color: var(--black);
+      background: var(--white); outline: none;
+    }
+    .search-input:focus { border-color: var(--maroon); }
+    .filter-select {
+      padding: 7px 10px; border: 1.5px solid var(--gray-200);
+      border-radius: 7px; font-family: var(--font-b); font-size: 0.82rem;
+      background: var(--white); color: var(--black); outline: none; cursor: pointer;
+    }
+    .filter-select:focus { border-color: var(--maroon); }
+    .count-chip {
+      font-size: 0.72rem; color: var(--gray-500);
+      background: var(--gray-100); border: 1px solid var(--gray-200);
+      padding: 4px 10px; border-radius: 20px; white-space: nowrap;
+    }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; }
+    thead tr { background: var(--gray-50); border-bottom: 2px solid var(--gray-200); }
+    th { padding: 10px 14px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gray-700); text-align: left; white-space: nowrap; }
+    td { padding: 11px 14px; font-size: 0.83rem; color: var(--black); border-bottom: 1px solid var(--gray-100); vertical-align: middle; }
+    tr:hover td { background: var(--gray-100); }
+    tr:last-child td { border-bottom: none; }
+    .td-img { width: 44px; height: 44px; border-radius: 8px; object-fit: cover; border: 1px solid var(--gray-200); }
+    .td-name { font-weight: 600; color: var(--maroon-dark); max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .td-sub  { font-size: 0.72rem; color: var(--gray-500); margin-top: 1px; }
+    .td-price { font-weight: 700; color: var(--maroon); font-family: var(--font-h); }
+    .td-actions { display: flex; gap: 6px; }
+    .edit-btn, .del-btn {
+      padding: 4px 11px; border-radius: 6px; font-size: 0.72rem; font-weight: 600;
+      cursor: pointer; font-family: var(--font-b); border: none; transition: var(--transition);
+    }
+    .edit-btn { background: rgba(139,0,0,0.08); color: var(--maroon); border: 1px solid rgba(139,0,0,0.15); }
+    .edit-btn:hover { background: var(--maroon); color: var(--white); }
+    .del-btn  { background: rgba(192,57,43,0.08); color: var(--danger); border: 1px solid rgba(192,57,43,0.2); }
+    .del-btn:hover  { background: var(--danger); color: var(--white); }
+
+    /* Status badges */
+    .badge {
+      display: inline-block; padding: 3px 9px;
+      border-radius: 20px; font-size: 0.67rem; font-weight: 700; letter-spacing: 0.04em;
+    }
+    .badge-pending   { background: rgba(212,134,31,0.12); color: var(--warning); border: 1px solid rgba(212,134,31,0.25); }
+    .badge-confirmed { background: rgba(45,106,79,0.1);   color: var(--success); border: 1px solid rgba(45,106,79,0.2); }
+    .badge-delivered { background: rgba(26,82,118,0.1);   color: var(--info);    border: 1px solid rgba(26,82,118,0.2); }
+    .badge-cancelled { background: rgba(192,57,43,0.1);   color: var(--danger);  border: 1px solid rgba(192,57,43,0.2); }
+    .badge-cat  { background: rgba(139,0,0,0.08); color: var(--maroon); border: 1px solid rgba(139,0,0,0.15); }
+    .badge-gold { background: rgba(212,175,55,0.12); color: var(--gold-dark); border: 1px solid rgba(212,175,55,0.25); }
+
+    /* Category filter tabs */
+    .cat-tabs { display: flex; gap: 6px; padding: 12px 18px; border-bottom: 1px solid var(--gray-200); flex-wrap: wrap; background: var(--gray-50); }
+    .cat-tab {
+      padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600;
+      border: 1.5px solid var(--gray-200); background: var(--white);
+      color: var(--gray-700); cursor: pointer; transition: var(--transition); font-family: var(--font-b);
+    }
+    .cat-tab:hover  { border-color: var(--maroon); color: var(--maroon); }
+    .cat-tab.active { background: var(--maroon); color: var(--gold); border-color: var(--maroon); }
+
+    /* Status select */
+    .status-sel {
+      padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; font-family: var(--font-b);
+      border: 1px solid var(--gray-200); background: var(--white); cursor: pointer; outline: none;
+    }
+    .status-sel:focus { border-color: var(--maroon); }
+
+    /* Featured checkbox */
+    .feat-check { width: 16px; height: 16px; accent-color: var(--maroon); cursor: pointer; }
+
+    /* =====================================================
+       CATEGORIES PANEL
+       ===================================================== */
+    .cats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
+    .cat-card {
+      background: var(--white); border: 1px solid var(--gray-200);
+      border-radius: var(--radius); padding: 16px 18px;
+      box-shadow: var(--shadow); display: flex; align-items: center;
+      justify-content: space-between; transition: var(--transition);
+    }
+    .cat-card:hover { box-shadow: var(--shadow-md); border-color: rgba(139,0,0,0.2); }
+    .cat-card-info { display: flex; flex-direction: column; gap: 3px; }
+    .cat-name { font-weight: 600; color: var(--maroon-dark); font-size: 0.9rem; }
+    .cat-type { font-size: 0.72rem; color: var(--gray-500); }
+    .cat-actions { display: flex; gap: 6px; }
+
+    /* Empty state */
+    .empty-row td { text-align: center; padding: 32px; color: var(--gray-500); font-size: 0.85rem; }
+
+    /* =====================================================
+       MODAL
+       ===================================================== */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(3px); z-index: 9000;
+      display: flex; align-items: center; justify-content: center; padding: 20px;
+      animation: fadein 0.2s ease;
+    }
+    .modal-overlay.hidden { display: none; }
+    .modal {
+      background: var(--white); border-radius: 16px;
+      width: 100%; max-width: 540px; max-height: 90vh; overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      animation: slideup 0.25s ease;
+    }
+    .modal-hdr {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 22px; border-bottom: 1px solid var(--gray-200);
+      position: sticky; top: 0; background: var(--white); z-index: 1;
+    }
+    .modal-hdr h3 { font-family: var(--font-h); font-size: 1.1rem; color: var(--maroon-dark); }
+    .modal-close {
+      width: 32px; height: 32px; border-radius: 50%; border: none;
+      background: var(--gray-100); color: var(--gray-700); font-size: 1rem;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: var(--transition); font-family: var(--font-b);
+    }
+    .modal-close:hover { background: var(--danger); color: var(--white); }
+    .modal-body { padding: 22px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .f-group { display: flex; flex-direction: column; gap: 5px; }
+    .f-group.full { grid-column: 1 / -1; }
+    .f-label { font-size: 0.75rem; font-weight: 600; color: var(--gray-700); }
+    .f-input {
+      padding: 9px 12px; border: 1.5px solid var(--gray-200); border-radius: 8px;
+      font-family: var(--font-b); font-size: 0.85rem; color: var(--black);
+      background: var(--white); outline: none; transition: var(--transition);
+      width: 100%;
+    }
+    .f-input:focus { border-color: var(--maroon); box-shadow: 0 0 0 3px rgba(139,0,0,0.07); }
+    .f-input::placeholder { color: var(--gray-300); }
+    select.f-input { cursor: pointer; }
+    textarea.f-input { resize: vertical; min-height: 80px; }
+    .img-preview { width: 100%; height: 100px; object-fit: cover; border-radius: 8px; border: 1px solid var(--gray-200); margin-top: 6px; display: none; }
+    .feat-row { display: flex; align-items: center; gap: 8px; }
+    .feat-row label { font-size: 0.82rem; color: var(--gray-700); cursor: pointer; }
+    .modal-ftr { padding: 16px 22px; border-top: 1px solid var(--gray-200); display: flex; gap: 10px; justify-content: flex-end; }
+    .save-btn {
+      padding: 9px 22px; background: var(--maroon); color: var(--gold);
+      border: none; border-radius: 8px; font-family: var(--font-b);
+      font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: var(--transition);
+    }
+    .save-btn:hover { background: var(--maroon-light); }
+    .save-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .cancel-btn {
+      padding: 9px 18px; background: var(--gray-100);
+      border: 1px solid var(--gray-200); border-radius: 8px;
+      font-family: var(--font-b); font-size: 0.85rem; font-weight: 600;
+      cursor: pointer; color: var(--gray-700); transition: var(--transition);
+    }
+    .cancel-btn:hover { background: var(--gray-200); }
+
+    /* Recent orders table */
+    code { background: var(--gray-100); border: 1px solid var(--gray-200); padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; color: var(--maroon); }
+
+    /* Spinner */
+    .spinner { width: 28px; height: 28px; border: 3px solid var(--gray-200); border-top-color: var(--maroon); border-radius: 50%; animation: spin 0.7s linear infinite; margin: 20px auto; }
+    .spin-wrap { text-align: center; padding: 24px; }
+
+    /* Toast */
+    .toast-area { position: fixed; bottom: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; }
+    .toast-msg  { padding: 10px 16px; border-radius: 10px; font-size: 0.82rem; font-weight: 500; font-family: var(--font-b); min-width: 240px; animation: slideright 0.3s ease; box-shadow: var(--shadow-md); }
+    .toast-msg.success { background: #fff; border-left: 4px solid var(--success); color: var(--success); }
+    .toast-msg.error   { background: #fff; border-left: 4px solid var(--danger);  color: var(--danger);  }
+    .toast-msg.info    { background: #fff; border-left: 4px solid var(--info);    color: var(--info);    }
+
+    @keyframes fadein    { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideup   { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes slideright{ from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes spin      { to { transform: rotate(360deg); } }
+    ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: var(--gray-100); } ::-webkit-scrollbar-thumb { background: rgba(139,0,0,0.25); border-radius: 3px; }
+  </style>
+</head>
+<body>
+
+<!-- =====================================================
+     SIDEBAR
+     ===================================================== -->
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div>
+      <div class="sidebar-brand-text">Shaadi Bazaar</div>
+      <div class="sidebar-brand-sub">Admin Panel</div>
+    </div>
+  </div>
+  <div class="sidebar-scroll">
+    <div class="nav-section">
+      <span class="nav-section-label">Overview</span>
+      <button class="nav-btn active" data-panel="panel-dashboard">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+        Dashboard
+      </button>
+    </div>
+    <div class="nav-section">
+      <span class="nav-section-label">Inventory</span>
+      <button class="nav-btn" data-panel="panel-products">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+        Products
+      </button>
+      <button class="nav-btn" data-panel="panel-services">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        Services
+      </button>
+      <button class="nav-btn" data-panel="panel-categories">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
+        Categories
+      </button>
+    </div>
+    <div class="nav-section">
+      <span class="nav-section-label">Transactions</span>
+      <button class="nav-btn" data-panel="panel-orders">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+        Orders
+      </button>
+      <button class="nav-btn" data-panel="panel-bookings">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+        Bookings
+      </button>
+      <button class="nav-btn" data-panel="panel-users">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+        Users
+      </button>
+    </div>
+  </div>
+  <div class="sidebar-footer">
+    <button class="logout-nav-btn" onclick="doLogout()">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+      Logout
+    </button>
+  </div>
+</aside>
+
+<!-- =====================================================
+     TOPBAR
+     ===================================================== -->
+<div class="topbar">
+  <div class="topbar-title" id="topbar-panel-name">Dashboard</div>
+  <div class="topbar-date" id="topbar-date"></div>
+  <div class="topbar-user">
+    <div class="topbar-avatar">A</div>
+    <span>Admin</span>
+  </div>
+  <a href="../index.html" class="view-site-btn">← View Site</a>
+</div>
+
+<!-- =====================================================
+     MAIN
+     ===================================================== -->
+<div class="main">
+<div class="content">
+
+  <!-- ======== DASHBOARD PANEL ======== -->
+  <div class="panel active" id="panel-dashboard">
+    <div class="page-hdr">
+      <h2>Dashboard Overview</h2>
+      <p>Welcome back! Here's what's happening with Shaadi Bazaar today.</p>
+    </div>
+
+    <div class="stats-grid" id="stats-grid">
+      <div class="stat-card"><div class="stat-ico m"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg></div><div><div class="stat-val" id="sv-users">—</div><div class="stat-lbl">Total Users</div></div></div>
+      <div class="stat-card"><div class="stat-ico g"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg></div><div><div class="stat-val" id="sv-products">—</div><div class="stat-lbl">Products</div></div></div>
+      <div class="stat-card"><div class="stat-ico s"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg></div><div><div class="stat-val" id="sv-services">—</div><div class="stat-lbl">Services</div></div></div>
+      <div class="stat-card"><div class="stat-ico b"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></div><div><div class="stat-val" id="sv-orders">—</div><div class="stat-lbl">Orders</div></div></div>
+      <div class="stat-card"><div class="stat-ico m"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div><div><div class="stat-val" id="sv-bookings">—</div><div class="stat-lbl">Bookings</div></div></div>
+      <div class="stat-card"><div class="stat-ico g"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><div><div class="stat-val" id="sv-revenue" style="font-size:1.1rem">—</div><div class="stat-lbl">Revenue</div></div></div>
+    </div>
+
+    <div class="quick-row">
+      <button class="q-btn" onclick="switchPanel('panel-products'); setTimeout(openProductModal,200)">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+        Add Product
+      </button>
+      <button class="q-btn" onclick="switchPanel('panel-services'); setTimeout(openServiceModal,200)">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+        Add Service
+      </button>
+      <button class="q-btn outline" onclick="switchPanel('panel-orders')">View All Orders</button>
+    </div>
+
+    <div class="table-card">
+      <div class="table-card-hdr"><div><h3>Recent Orders</h3><p>Last 10 orders placed</p></div></div>
+      <div class="table-wrap">
+        <table><thead><tr><th>Order ID</th><th>Customer</th><th>Amount</th><th>Payment</th><th>Status</th><th>Date</th></tr></thead>
+        <tbody id="recent-tbody"><tr><td colspan="6"><div class="spin-wrap"><div class="spinner"></div></div></td></tr></tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======== PRODUCTS PANEL ======== -->
+  <div class="panel" id="panel-products">
+    <div class="page-hdr-row">
+      <div class="page-hdr"><h2>Products</h2><p>Manage all product listings</p></div>
+      <button class="q-btn" onclick="openProductModal()">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+        Add New Product
+      </button>
+    </div>
+    <div class="table-card">
+      <div class="cat-tabs" id="prod-cat-tabs">
+        <button class="cat-tab active" data-cat="">All</button>
+      </div>
+      <div class="table-toolbar">
+        <input type="text" class="search-input" id="prod-search" placeholder="Search products...">
+        <span class="count-chip"><span id="prod-count">0</span> products</span>
+      </div>
+      <div class="table-wrap">
+        <table><thead><tr><th>Image</th><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Featured</th><th>Date</th><th>Actions</th></tr></thead>
+        <tbody id="prod-tbody"><tr><td colspan="8"><div class="spin-wrap"><div class="spinner"></div></div></td></tr></tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======== SERVICES PANEL ======== -->
+  <div class="panel" id="panel-services">
+    <div class="page-hdr-row">
+      <div class="page-hdr"><h2>Services</h2><p>Manage vendor service listings</p></div>
+      <button class="q-btn" onclick="openServiceModal()">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+        Add New Service
+      </button>
+    </div>
+    <div class="table-card">
+      <div class="cat-tabs" id="svc-cat-tabs">
+        <button class="cat-tab active" data-cat="">All</button>
+      </div>
+      <div class="table-toolbar">
+        <input type="text" class="search-input" id="svc-search" placeholder="Search services...">
+        <span class="count-chip"><span id="svc-count">0</span> services</span>
+      </div>
+      <div class="table-wrap">
+        <table><thead><tr><th>Image</th><th>Title / Provider</th><th>Category</th><th>City</th><th>Price/Day</th><th>Rating</th><th>Actions</th></tr></thead>
+        <tbody id="svc-tbody"><tr><td colspan="7"><div class="spin-wrap"><div class="spinner"></div></div></td></tr></tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======== CATEGORIES PANEL ======== -->
+  <div class="panel" id="panel-categories">
+    <div class="page-hdr-row">
+      <div class="page-hdr"><h2>Categories</h2><p>Manage product and service categories</p></div>
+      <button class="q-btn" onclick="openCatModal()">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+        Add Category
+      </button>
+    </div>
+
+    <h3 style="font-family:var(--font-h);font-size:1rem;color:var(--maroon-dark);margin-bottom:12px;">Product Categories</h3>
+    <div class="cats-grid" id="prod-cats-grid" style="margin-bottom:24px;"></div>
+
+    <h3 style="font-family:var(--font-h);font-size:1rem;color:var(--maroon-dark);margin-bottom:12px;">Service Categories</h3>
+    <div class="cats-grid" id="svc-cats-grid"></div>
+  </div>
+
+  <!-- ======== ORDERS PANEL ======== -->
+  <div class="panel" id="panel-orders">
+    <div class="page-hdr"><h2>All Orders</h2><p>View and manage customer orders</p></div>
+    <div class="table-card">
+      <div class="table-toolbar">
+        <input type="text" class="search-input" id="ord-search" placeholder="Search by customer or ID...">
+        <select class="filter-select" id="ord-status">
+          <option value="">All Statuses</option>
+          <option>pending</option><option>confirmed</option><option>delivered</option><option>cancelled</option>
+        </select>
+        <span class="count-chip"><span id="ord-count">0</span> orders</span>
+      </div>
+      <div class="table-wrap">
+        <table><thead><tr><th>Order ID</th><th>Customer</th><th>Amount</th><th>City</th><th>Payment</th><th>Status</th><th>Date</th></tr></thead>
+        <tbody id="ord-tbody"><tr><td colspan="7"><div class="spin-wrap"><div class="spinner"></div></div></td></tr></tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======== BOOKINGS PANEL ======== -->
+  <div class="panel" id="panel-bookings">
+    <div class="page-hdr"><h2>All Bookings</h2><p>View and manage customer service bookings</p></div>
+    <div class="table-card">
+      <div class="table-toolbar">
+        <input type="text" class="search-input" id="bk-search" placeholder="Search by customer, service or ID...">
+        <select class="filter-select" id="bk-status">
+          <option value="">All Statuses</option>
+          <option>pending</option><option>confirmed</option><option>cancelled</option>
+        </select>
+        <span class="count-chip"><span id="bk-count">0</span> bookings</span>
+      </div>
+      <div class="table-wrap">
+        <table><thead><tr><th>Booking ID</th><th>Customer Details</th><th>Service Details</th><th>Price</th><th>Date & Slot</th><th>Status</th><th>Notes / Address</th></tr></thead>
+        <tbody id="bk-tbody"><tr><td colspan="7"><div class="spin-wrap"><div class="spinner"></div></div></td></tr></tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======== USERS PANEL ======== -->
+  <div class="panel" id="panel-users">
+    <div class="page-hdr"><h2>Users</h2><p>Registered customers on Shaadi Bazaar</p></div>
+    <div class="table-card">
+      <div class="table-toolbar">
+        <input type="text" class="search-input" id="usr-search" placeholder="Search users...">
+        <span class="count-chip"><span id="usr-count">0</span> users</span>
+      </div>
+      <div class="table-wrap">
+        <table><thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>City</th><th>Role</th><th>Joined</th></tr></thead>
+        <tbody id="usr-tbody"><tr><td colspan="6"><div class="spin-wrap"><div class="spinner"></div></div></td></tr></tbody></table>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- =====================================================
+     PRODUCT MODAL
+     ===================================================== -->
+<div class="modal-overlay hidden" id="prod-modal">
+  <div class="modal">
+    <div class="modal-hdr">
+      <h3 id="prod-modal-title">Add New Product</h3>
+      <button class="modal-close" onclick="closeProdModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <form id="prod-form">
+        <div class="form-grid">
+          <div class="f-group full"><label class="f-label">Product Name *</label><input type="text" id="p-name" class="f-input" placeholder="e.g. Bridal Lehenga" required></div>
+          <div class="f-group"><label class="f-label">Category *</label>
+            <select id="p-cat" class="f-input" required>
+              <option value="">Select category</option>
+            </select>
+          </div>
+          <div class="f-group"><label class="f-label">Price (Rs.) *</label><input type="number" id="p-price" class="f-input" placeholder="5000" min="0" required></div>
+          <div class="f-group"><label class="f-label">Stock *</label><input type="number" id="p-stock" class="f-input" placeholder="10" min="0" required></div>
+          <div class="f-group full"><label class="f-label">Image URL</label><input type="url" id="p-img" class="f-input" placeholder="https://..." oninput="previewImg('p-img','p-img-preview')"><img id="p-img-preview" class="img-preview"></div>
+          <div class="f-group full"><label class="f-label">Description</label><textarea id="p-desc" class="f-input" placeholder="Product description..."></textarea></div>
+          <div class="f-group full">
+            <div class="feat-row">
+              <input type="checkbox" id="p-featured" class="feat-check">
+              <label for="p-featured">Mark as Featured Product</label>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-ftr">
+      <button class="cancel-btn" onclick="closeProdModal()">Cancel</button>
+      <button class="save-btn" id="prod-save-btn" onclick="saveProduct()">Save Product</button>
+    </div>
+  </div>
+</div>
+
+<!-- =====================================================
+     SERVICE MODAL
+     ===================================================== -->
+<div class="modal-overlay hidden" id="svc-modal">
+  <div class="modal">
+    <div class="modal-hdr">
+      <h3 id="svc-modal-title">Add New Service</h3>
+      <button class="modal-close" onclick="closeSvcModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <form id="svc-form">
+        <div class="form-grid">
+          <div class="f-group full"><label class="f-label">Service Title *</label><input type="text" id="s-title" class="f-input" placeholder="e.g. Professional Wedding Photography" required></div>
+          <div class="f-group"><label class="f-label">Provider Name *</label><input type="text" id="s-provider" class="f-input" placeholder="Studio / Vendor name" required></div>
+          <div class="f-group"><label class="f-label">Category *</label>
+            <select id="s-cat" class="f-input" required>
+              <option value="">Select category</option>
+            </select>
+          </div>
+          <div class="f-group"><label class="f-label">City *</label>
+            <select id="s-city" class="f-input" required>
+              <option value="">Select city</option>
+              <option>Karachi</option><option>Lahore</option><option>Islamabad</option>
+              <option>Rawalpindi</option><option>Faisalabad</option><option>Multan</option>
+              <option>Peshawar</option><option>Quetta</option><option>Other</option>
+            </select>
+          </div>
+          <div class="f-group"><label class="f-label">Price Per Day (Rs.) *</label><input type="number" id="s-price" class="f-input" placeholder="15000" min="0" required></div>
+          <div class="f-group"><label class="f-label">Rating (0-5)</label><input type="number" id="s-rating" class="f-input" placeholder="4.5" min="0" max="5" step="0.1"></div>
+          <div class="f-group full"><label class="f-label">Image URL</label><input type="url" id="s-img" class="f-input" placeholder="https://..." oninput="previewImg('s-img','s-img-preview')"><img id="s-img-preview" class="img-preview"></div>
+          <div class="f-group full"><label class="f-label">Description</label><textarea id="s-desc" class="f-input" placeholder="Service description..."></textarea></div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-ftr">
+      <button class="cancel-btn" onclick="closeSvcModal()">Cancel</button>
+      <button class="save-btn" id="svc-save-btn" onclick="saveService()">Save Service</button>
+    </div>
+  </div>
+</div>
+
+<!-- =====================================================
+     CATEGORY MODAL
+     ===================================================== -->
+<div class="modal-overlay hidden" id="cat-modal">
+  <div class="modal" style="max-width:400px;">
+    <div class="modal-hdr">
+      <h3 id="cat-modal-title">Add Category</h3>
+      <button class="modal-close" onclick="closeCatModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="f-group full"><label class="f-label">Category Name *</label><input type="text" id="cat-name" class="f-input" placeholder="e.g. Bridal"></div>
+        <div class="f-group full"><label class="f-label">Category Key (no spaces) *</label><input type="text" id="cat-key" class="f-input" placeholder="e.g. bridal"></div>
+        <div class="f-group full"><label class="f-label">Type *</label>
+          <select id="cat-type" class="f-input">
+            <option value="product">Product Category</option>
+            <option value="service">Service Category</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-ftr">
+      <button class="cancel-btn" onclick="closeCatModal()">Cancel</button>
+      <button class="save-btn" id="cat-save-btn" onclick="saveCat()">Save Category</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-area" id="toast-area"></div>
+
+<script src="../js/config.js"></script>
+<script>
+// ============================================================
+// ADMIN PANEL SCRIPT
+// ============================================================
+
+// ── Categories loaded dynamically from DB ──────────────────
+let prodCategories = [];
+let svcCategories = [];
+
+async function loadCategoriesFromDB() {
+  try {
+    const data = await apiCall('/categories');
+    const categories = data.categories || [];
+    prodCategories = categories.filter(c => c.type === 'product');
+    svcCategories  = categories.filter(c => c.type === 'service');
+  } catch (err) {
+    toast('Failed to load categories from database: ' + err.message, 'error');
+  }
+}
+
+// State
+let editingProductId = null;
+let editingServiceId = null;
+let editingCatKey    = null;
+let _products = [], _services = [], _orders = [], _users = [], _bookings = [];
+let prodCatFilter = '', svcCatFilter = '';
+
+// ── Init ─────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', async () => {
+  // Auth check
+  const user = requireAdmin ? requireAdmin() : getCurrentUser();
+  if (!user || user.role !== 'admin') {
+    window.location.href = '../auth.html?tab=admin';
+    return;
+  }
+
+  // Date
+  document.getElementById('topbar-date').textContent = new Date().toLocaleDateString('en-PK', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+
+  // Sidebar nav
+  document.querySelectorAll('.nav-btn[data-panel]').forEach(btn => {
+    btn.addEventListener('click', () => switchPanel(btn.dataset.panel));
+  });
+
+  // Search / filter listeners
+  document.getElementById('prod-search').addEventListener('input', debounce(renderProducts, 300));
+  document.getElementById('svc-search').addEventListener('input', debounce(renderServices, 300));
+  document.getElementById('ord-search').addEventListener('input', debounce(renderOrders, 300));
+  document.getElementById('ord-status').addEventListener('change', renderOrders);
+  document.getElementById('usr-search').addEventListener('input', debounce(renderUsers, 300));
+  document.getElementById('bk-search').addEventListener('input', debounce(renderBookings, 300));
+  document.getElementById('bk-status').addEventListener('change', renderBookings);
+
+  // Load all categories and populate dynamic layouts
+  await loadCategoriesFromDB();
+  renderProdCategoryTabs();
+  renderSvcCategoryTabs();
+  populateProductFormDropdown();
+  populateServiceFormDropdown();
+
+  // Load all other data
+  await Promise.all([loadStats(), loadRecentOrders(), loadProducts(), loadServices(), loadOrders(), loadUsers(), loadBookings()]);
+  renderCategoryPanel();
+});
+
+function renderProdCategoryTabs() {
+  const tabs = document.getElementById('prod-cat-tabs');
+  if (!tabs) return;
+  let html = `<button class="cat-tab active" data-cat="">All</button>`;
+  html += prodCategories.map(c => `<button class="cat-tab" data-cat="${c.key}">${c.name}</button>`).join('');
+  tabs.innerHTML = html;
+
+  tabs.querySelectorAll('.cat-tab').forEach(t => {
+    t.addEventListener('click', () => {
+      tabs.querySelectorAll('.cat-tab').forEach(x => x.classList.remove('active'));
+      t.classList.add('active');
+      prodCatFilter = t.dataset.cat;
+      renderProducts();
+    });
+  });
+}
+
+function renderSvcCategoryTabs() {
+  const tabs = document.getElementById('svc-cat-tabs');
+  if (!tabs) return;
+  let html = `<button class="cat-tab active" data-cat="">All</button>`;
+  html += svcCategories.map(c => `<button class="cat-tab" data-cat="${c.key}">${c.name}</button>`).join('');
+  tabs.innerHTML = html;
+
+  tabs.querySelectorAll('.cat-tab').forEach(t => {
+    t.addEventListener('click', () => {
+      tabs.querySelectorAll('.cat-tab').forEach(x => x.classList.remove('active'));
+      t.classList.add('active');
+      svcCatFilter = t.dataset.cat;
+      renderServices();
+    });
+  });
+}
+
+function populateProductFormDropdown() {
+  const sel = document.getElementById('p-cat');
+  if (!sel) return;
+  let html = `<option value="">Select category</option>`;
+  html += prodCategories.map(c => `<option value="${c.key}">${c.name}</option>`).join('');
+  sel.innerHTML = html;
+}
+
+function populateServiceFormDropdown() {
+  const sel = document.getElementById('s-cat');
+  if (!sel) return;
+  let html = `<option value="">Select category</option>`;
+  html += svcCategories.map(c => `<option value="${c.key}">${c.name}</option>`).join('');
+  sel.innerHTML = html;
+}
+
+// ── Panel switching ─────────────────────────────────────────
+function switchPanel(id) {
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById(id)?.classList.add('active');
+  document.querySelector(`.nav-btn[data-panel="${id}"]`)?.classList.add('active');
+
+  const titles = { 'panel-dashboard':'Dashboard', 'panel-products':'Products', 'panel-services':'Services', 'panel-categories':'Categories', 'panel-orders':'Orders', 'panel-users':'Users', 'panel-bookings':'Bookings' };
+  document.getElementById('topbar-panel-name').textContent = titles[id] || 'Dashboard';
+
+  if (id === 'panel-dashboard') {
+    loadStats();
+    loadRecentOrders();
+  }
+}
+
+// ── Logout ──────────────────────────────────────────────────
+function doLogout() {
+  try { apiCall('/auth/logout', { method: 'POST' }); } catch(_) {}
+  localStorage.removeItem('sb_token');
+  localStorage.removeItem('sb_user');
+  window.location.href = '../auth.html?tab=admin';
+}
+
+// =====================================================
+// STATS
+// =====================================================
+async function loadStats() {
+  try {
+    const { stats } = await apiCall('/admin/stats');
+    const s = id => { const e = document.getElementById(id); if(e) e.textContent = stats[Object.keys(stats).find(k=>id.includes(k.replace('total','').toLowerCase()))] || 0; };
+    document.getElementById('sv-users').textContent    = stats.totalUsers    || 0;
+    document.getElementById('sv-products').textContent = stats.totalProducts || 0;
+    document.getElementById('sv-services').textContent = stats.totalServices || 0;
+    document.getElementById('sv-orders').textContent   = stats.totalOrders   || 0;
+    document.getElementById('sv-bookings').textContent = stats.totalBookings || 0;
+    document.getElementById('sv-revenue').textContent  = 'Rs. ' + parseFloat(stats.totalRevenue||0).toLocaleString();
+  } catch(err) {
+    toast('Failed to load stats: ' + (err.message || 'Check backend'), 'error');
+  }
+}
+
+// =====================================================
+// RECENT ORDERS (Dashboard)
+// =====================================================
+async function loadRecentOrders() {
+  const tbody = document.getElementById('recent-tbody');
+  try {
+    const { orders = [] } = await apiCall('/admin/orders');
+    if (!orders.length) { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--gray-500);">No orders yet</td></tr>'; return; }
+    tbody.innerHTML = orders.slice(0,10).map(o => `
+      <tr>
+        <td><code>#${(o.id||'').slice(0,8).toUpperCase()}</code></td>
+        <td><div style="font-weight:600">${o.users?.name||'—'}</div><div style="font-size:0.72rem;color:var(--gray-500)">${o.users?.email||''}</div></td>
+        <td class="td-price">Rs. ${parseFloat(o.total_amount||0).toLocaleString()}</td>
+        <td><span class="badge badge-gold">${(o.payment_method||'').toUpperCase()}</span></td>
+        <td><span class="badge badge-${o.status||'pending'}">${o.status||'pending'}</span></td>
+        <td>${fmtDate(o.created_at)}</td>
+      </tr>`).join('');
+  } catch { tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--gray-500);">Could not load orders</td></tr>'; }
+}
+
+// =====================================================
+// PRODUCTS
+// =====================================================
+async function loadProducts() {
+  try {
+    const { products = [] } = await apiCall('/products?sort=created_at&order=desc');
+    _products = products;
+    renderProducts();
+  } catch { document.getElementById('prod-tbody').innerHTML = '<tr class="empty-row"><td colspan="8">Failed to load products</td></tr>'; }
+}
+
+function renderProducts() {
+  const search = document.getElementById('prod-search').value.toLowerCase();
+  let list = _products;
+  if (prodCatFilter) list = list.filter(p => p.category === prodCatFilter);
+  if (search) list = list.filter(p => p.name?.toLowerCase().includes(search));
+  document.getElementById('prod-count').textContent = list.length;
+
+  const tbody = document.getElementById('prod-tbody');
+  if (!list.length) { tbody.innerHTML = '<tr class="empty-row"><td colspan="8">No products found</td></tr>'; return; }
+  tbody.innerHTML = list.map(p => `
+    <tr>
+      <td><img class="td-img" src="${p.image_url||'https://placehold.co/44x44/f9f3ec/8B0000?text=P'}" alt="${p.name||''}"></td>
+      <td><div class="td-name" title="${p.name}">${p.name}</div></td>
+      <td><span class="badge badge-cat">${p.category}</span></td>
+      <td class="td-price">Rs. ${parseFloat(p.price||0).toLocaleString()}</td>
+      <td>${p.stock}</td>
+      <td>${p.is_featured ? '<span class="badge badge-gold">Yes</span>' : '<span style="color:var(--gray-500);font-size:0.75rem">No</span>'}</td>
+      <td style="font-size:0.75rem;color:var(--gray-500)">${fmtDate(p.created_at)}</td>
+      <td><div class="td-actions"><button class="edit-btn" onclick="openProductModal('${p.id}')">Edit</button><button class="del-btn" onclick="deleteProduct('${p.id}','${(p.name||'').replace(/'/g,"\\'")}')">Delete</button></div></td>
+    </tr>`).join('');
+}
+
+function openProductModal(id) {
+  editingProductId = id || null;
+  document.getElementById('prod-modal-title').textContent = id ? 'Edit Product' : 'Add New Product';
+  document.getElementById('prod-form').reset();
+  document.getElementById('p-img-preview').style.display = 'none';
+
+  if (id) {
+    const p = _products.find(x => x.id === id);
+    if (p) {
+      document.getElementById('p-name').value    = p.name || '';
+      document.getElementById('p-cat').value     = p.category || '';
+      document.getElementById('p-price').value   = p.price || '';
+      document.getElementById('p-stock').value   = p.stock || '';
+      document.getElementById('p-img').value     = p.image_url || '';
+      document.getElementById('p-desc').value    = p.description || '';
+      document.getElementById('p-featured').checked = !!p.is_featured;
+      if (p.image_url) { document.getElementById('p-img-preview').src = p.image_url; document.getElementById('p-img-preview').style.display='block'; }
+    }
+  }
+  document.getElementById('prod-modal').classList.remove('hidden');
+}
+
+function closeProdModal() { document.getElementById('prod-modal').classList.add('hidden'); editingProductId = null; }
+
+async function saveProduct() {
+  const btn = document.getElementById('prod-save-btn');
+  const name  = document.getElementById('p-name').value.trim();
+  const cat   = document.getElementById('p-cat').value;
+  const price = parseFloat(document.getElementById('p-price').value);
+  const stock = parseInt(document.getElementById('p-stock').value);
+  if (!name || !cat || isNaN(price)) { toast('Please fill required fields', 'error'); return; }
+
+  const body = { name, category: cat, price, stock, description: document.getElementById('p-desc').value.trim(), image_url: document.getElementById('p-img').value.trim(), is_featured: document.getElementById('p-featured').checked };
+  btn.disabled = true; btn.textContent = 'Saving...';
+  try {
+    if (editingProductId) { await apiCall(`/products/${editingProductId}`, { method:'PUT', body: JSON.stringify(body) }); toast('Product updated!', 'success'); }
+    else { await apiCall('/products', { method:'POST', body: JSON.stringify(body) }); toast('Product added!', 'success'); }
+    closeProdModal();
+    await loadProducts();
+    await loadStats();
+  } catch(e) { toast(e.message||'Save failed', 'error'); }
+  finally { btn.disabled = false; btn.textContent = 'Save Product'; }
+}
+
+async function deleteProduct(id, name) {
+  if (!confirm(`Delete "${name}"? This cannot be undone.`)) return;
+  try {
+    await apiCall(`/products/${id}`, { method:'DELETE' });
+    toast('Product deleted', 'info');
+    await loadProducts();
+    await loadStats();
+  } catch(e) { toast(e.message||'Delete failed', 'error'); }
+}
+
+// =====================================================
+// SERVICES
+// =====================================================
+async function loadServices() {
+  try {
+    const { services = [] } = await apiCall('/services?sort=created_at&order=desc');
+    _services = services;
+    renderServices();
+  } catch { document.getElementById('svc-tbody').innerHTML = '<tr class="empty-row"><td colspan="7">Failed to load services</td></tr>'; }
+}
+
+function renderServices() {
+  const search = document.getElementById('svc-search').value.toLowerCase();
+  let list = _services;
+  if (svcCatFilter) list = list.filter(s => s.category === svcCatFilter);
+  if (search) list = list.filter(s => s.title?.toLowerCase().includes(search) || s.city?.toLowerCase().includes(search));
+  document.getElementById('svc-count').textContent = list.length;
+
+  const tbody = document.getElementById('svc-tbody');
+  if (!list.length) { tbody.innerHTML = '<tr class="empty-row"><td colspan="7">No services found</td></tr>'; return; }
+  tbody.innerHTML = list.map(s => `
+    <tr>
+      <td><img class="td-img" src="${s.image_url||'https://placehold.co/44x44/f9f3ec/8B0000?text=S'}" alt="${s.title||''}"></td>
+      <td><div class="td-name" title="${s.title}">${s.title}</div><div class="td-sub">${s.provider_name||''}</div></td>
+      <td><span class="badge badge-cat">${s.category}</span></td>
+      <td style="font-size:0.8rem">${s.city}</td>
+      <td class="td-price">Rs. ${parseFloat(s.price_per_day||0).toLocaleString()}</td>
+      <td style="font-size:0.8rem;color:var(--gold-dark)">★ ${s.rating||0}</td>
+      <td><div class="td-actions"><button class="edit-btn" onclick="openServiceModal('${s.id}')">Edit</button><button class="del-btn" onclick="deleteService('${s.id}','${(s.title||'').replace(/'/g,"\\'")}')">Delete</button></div></td>
+    </tr>`).join('');
+}
+
+function openServiceModal(id) {
+  editingServiceId = id || null;
+  document.getElementById('svc-modal-title').textContent = id ? 'Edit Service' : 'Add New Service';
+  document.getElementById('svc-form').reset();
+  document.getElementById('s-img-preview').style.display = 'none';
+
+  if (id) {
+    const s = _services.find(x => x.id === id);
+    if (s) {
+      document.getElementById('s-title').value    = s.title || '';
+      document.getElementById('s-provider').value = s.provider_name || '';
+      document.getElementById('s-cat').value      = s.category || '';
+      document.getElementById('s-city').value     = s.city || '';
+      document.getElementById('s-price').value    = s.price_per_day || '';
+      document.getElementById('s-rating').value   = s.rating || '';
+      document.getElementById('s-img').value      = s.image_url || '';
+      document.getElementById('s-desc').value     = s.description || '';
+      if (s.image_url) { document.getElementById('s-img-preview').src = s.image_url; document.getElementById('s-img-preview').style.display='block'; }
+    }
+  }
+  document.getElementById('svc-modal').classList.remove('hidden');
+}
+
+function closeSvcModal() { document.getElementById('svc-modal').classList.add('hidden'); editingServiceId = null; }
+
+async function saveService() {
+  const btn = document.getElementById('svc-save-btn');
+  const title = document.getElementById('s-title').value.trim();
+  const cat   = document.getElementById('s-cat').value;
+  const city  = document.getElementById('s-city').value;
+  if (!title || !cat || !city) { toast('Please fill required fields', 'error'); return; }
+
+  const body = { title, provider_name: document.getElementById('s-provider').value.trim(), category: cat, city, price_per_day: parseFloat(document.getElementById('s-price').value)||0, rating: parseFloat(document.getElementById('s-rating').value)||0, description: document.getElementById('s-desc').value.trim(), image_url: document.getElementById('s-img').value.trim() };
+  btn.disabled = true; btn.textContent = 'Saving...';
+  try {
+    if (editingServiceId) { await apiCall(`/services/${editingServiceId}`, { method:'PUT', body: JSON.stringify(body) }); toast('Service updated!', 'success'); }
+    else { await apiCall('/services', { method:'POST', body: JSON.stringify(body) }); toast('Service added!', 'success'); }
+    closeSvcModal();
+    await loadServices();
+    await loadStats();
+  } catch(e) { toast(e.message||'Save failed', 'error'); }
+  finally { btn.disabled = false; btn.textContent = 'Save Service'; }
+}
+
+async function deleteService(id, title) {
+  if (!confirm(`Delete "${title}"?`)) return;
+  try {
+    await apiCall(`/services/${id}`, { method:'DELETE' });
+    toast('Service deleted', 'info');
+    await loadServices();
+    await loadStats();
+  } catch(e) { toast(e.message||'Delete failed', 'error'); }
+}
+
+// =====================================================
+// CATEGORIES
+// =====================================================
+function renderCategoryPanel() {
+  const pGrid = document.getElementById('prod-cats-grid');
+  const sGrid = document.getElementById('svc-cats-grid');
+  pGrid.innerHTML = prodCategories.map(c => catCard(c)).join('');
+  sGrid.innerHTML = svcCategories.map(c => catCard(c)).join('');
+}
+
+function catCard(c) {
+  return `
+    <div class="cat-card">
+      <div class="cat-card-info">
+        <div class="cat-name">${c.name}</div>
+        <div class="cat-type"><span class="badge badge-${c.type==='product'?'cat':'gold'}">${c.type}</span> · key: ${c.key}</div>
+      </div>
+      <div class="cat-actions">
+        <button class="edit-btn" onclick="openCatModal('${c.key}')">Edit</button>
+        <button class="del-btn" onclick="deleteCat('${c.key}')">Del</button>
+      </div>
+    </div>`;
+}
+
+function openCatModal(key) {
+  editingCatKey = key || null;
+  document.getElementById('cat-modal-title').textContent = key ? 'Edit Category' : 'Add Category';
+  document.getElementById('cat-name').value = '';
+  document.getElementById('cat-key').value  = '';
+  document.getElementById('cat-type').value = 'product';
+
+  if (key) {
+    const all = [...prodCategories, ...svcCategories];
+    const c = all.find(x => x.key === key);
+    if (c) { document.getElementById('cat-name').value = c.name; document.getElementById('cat-key').value = c.key; document.getElementById('cat-type').value = c.type; }
+  }
+  document.getElementById('cat-modal').classList.remove('hidden');
+}
+function closeCatModal() { document.getElementById('cat-modal').classList.add('hidden'); editingCatKey = null; }
+
+async function saveCat() {
+  const name = document.getElementById('cat-name').value.trim();
+  const key  = document.getElementById('cat-key').value.trim().toLowerCase().replace(/\s+/g,'_');
+  const type = document.getElementById('cat-type').value;
+  if (!name || !key) { toast('Name and key are required', 'error'); return; }
+
+  const body = { key, name, type };
+  const btn = document.getElementById('cat-save-btn');
+  btn.disabled = true; btn.textContent = 'Saving...';
+
+  try {
+    if (editingCatKey) {
+      await apiCall(`/categories/${editingCatKey}`, { method: 'PUT', body: JSON.stringify(body) });
+      toast('Category updated!', 'success');
+    } else {
+      await apiCall('/categories', { method: 'POST', body: JSON.stringify(body) });
+      toast('Category added!', 'success');
+    }
+    closeCatModal();
+    await loadCategoriesFromDB();
+    renderProdCategoryTabs();
+    renderSvcCategoryTabs();
+    populateProductFormDropdown();
+    populateServiceFormDropdown();
+    renderCategoryPanel();
+    await loadStats();
+  } catch (err) {
+    toast(err.message || 'Failed to save category', 'error');
+  } finally {
+    btn.disabled = false; btn.textContent = 'Save Category';
+  }
+}
+
+async function deleteCat(key) {
+  if (!confirm('Delete this category? This cannot be undone.')) return;
+  try {
+    await apiCall(`/categories/${key}`, { method: 'DELETE' });
+    toast('Category deleted', 'info');
+    await loadCategoriesFromDB();
+    renderProdCategoryTabs();
+    renderSvcCategoryTabs();
+    populateProductFormDropdown();
+    populateServiceFormDropdown();
+    renderCategoryPanel();
+    await loadStats();
+  } catch (err) {
+    toast(err.message || 'Failed to delete category', 'error');
+  }
+}
+
+// =====================================================
+// ORDERS
+// =====================================================
+async function loadOrders() {
+  try {
+    const { orders = [] } = await apiCall('/admin/orders');
+    _orders = orders;
+    renderOrders();
+  } catch { document.getElementById('ord-tbody').innerHTML = '<tr class="empty-row"><td colspan="7">Failed to load orders</td></tr>'; }
+}
+
+function renderOrders() {
+  const search = document.getElementById('ord-search').value.toLowerCase();
+  const status = document.getElementById('ord-status').value;
+  let list = _orders;
+  if (status) list = list.filter(o => o.status === status);
+  if (search) list = list.filter(o => o.users?.name?.toLowerCase().includes(search) || (o.id||'').includes(search));
+  document.getElementById('ord-count').textContent = list.length;
+
+  const tbody = document.getElementById('ord-tbody');
+  if (!list.length) { tbody.innerHTML = '<tr class="empty-row"><td colspan="7">No orders found</td></tr>'; return; }
+  tbody.innerHTML = list.map(o => `
+    <tr>
+      <td><code>#${(o.id||'').slice(0,8).toUpperCase()}</code></td>
+      <td><div style="font-weight:600">${o.users?.name||'—'}</div><div style="font-size:0.72rem;color:var(--gray-500)">${o.users?.email||''}</div></td>
+      <td class="td-price">Rs. ${parseFloat(o.total_amount||0).toLocaleString()}</td>
+      <td style="font-size:0.8rem">${o.city||'—'}</td>
+      <td><span class="badge badge-gold">${(o.payment_method||'').toUpperCase()}</span></td>
+      <td><select class="status-sel" onchange="updateOrderStatus('${o.id}',this.value)">
+        ${['pending','confirmed','delivered','cancelled'].map(s=>`<option value="${s}" ${o.status===s?'selected':''}>${s}</option>`).join('')}
+      </select></td>
+      <td style="font-size:0.75rem;color:var(--gray-500)">${fmtDate(o.created_at)}</td>
+    </tr>`).join('');
+}
+
+async function updateOrderStatus(id, status) {
+  try {
+    await apiCall(`/admin/orders/${id}`, { method:'PUT', body: JSON.stringify({ status }) });
+    toast(`Status updated to "${status}"`, 'success');
+    const o = _orders.find(x=>x.id===id);
+    if(o) o.status = status;
+    await loadStats();
+    await loadRecentOrders();
+  } catch { toast('Failed to update status', 'error'); }
+}
+
+// =====================================================
+// BOOKINGS
+// =====================================================
+async function loadBookings() {
+  try {
+    const { bookings = [] } = await apiCall('/admin/bookings');
+    _bookings = bookings;
+    renderBookings();
+  } catch {
+    document.getElementById('bk-tbody').innerHTML = '<tr class="empty-row"><td colspan="7">Failed to load bookings</td></tr>';
+  }
+}
+ 
+function renderBookings() {
+  const search = document.getElementById('bk-search').value.toLowerCase();
+  const status = document.getElementById('bk-status').value;
+  let list = _bookings;
+  if (status) list = list.filter(b => b.status === status);
+  if (search) {
+    list = list.filter(b => 
+      b.users?.name?.toLowerCase().includes(search) || 
+      b.services?.title?.toLowerCase().includes(search) || 
+      (b.id || '').includes(search)
+    );
+  }
+  document.getElementById('bk-count').textContent = list.length;
+ 
+  const tbody = document.getElementById('bk-tbody');
+  if (!list.length) {
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="7">No bookings found</td></tr>';
+    return;
+  }
+  
+  tbody.innerHTML = list.map(b => `
+    <tr>
+      <td><code>#${(b.id || '').slice(0, 8).toUpperCase()}</code></td>
+      <td>
+        <div style="font-weight:600">${b.users?.name || '—'}</div>
+        <div style="font-size:0.72rem;color:var(--gray-500)">${b.users?.email || ''}</div>
+        <div style="font-size:0.72rem;color:var(--gray-500)">${b.users?.phone || ''}</div>
+      </td>
+      <td>
+        <div style="font-weight:600;color:var(--maroon-dark)">${b.services?.title || '—'}</div>
+        <div style="font-size:0.72rem;color:var(--gray-500)">${b.services?.category || ''} · ${b.services?.city || ''}</div>
+      </td>
+      <td class="td-price">Rs. ${parseFloat(b.total_price || 0).toLocaleString()}</td>
+      <td style="font-size:0.8rem">
+        <div style="font-weight:600">${fmtDate(b.event_date)}</div>
+        <div style="font-size:0.75rem;color:var(--gray-500);text-transform:capitalize;">${b.time_slot || ''}</div>
+      </td>
+      <td>
+        <select class="status-sel" onchange="updateBookingStatus('${b.id}', this.value)">
+          ${['pending', 'confirmed', 'cancelled'].map(s => `<option value="${s}" ${b.status === s ? 'selected' : ''}>${s}</option>`).join('')}
+        </select>
+      </td>
+      <td style="font-size:0.8rem;max-width:200px;white-space:pre-wrap;word-break:break-word;">${b.notes || '—'}</td>
+    </tr>`).join('');
+}
+ 
+async function updateBookingStatus(id, status) {
+  try {
+    await apiCall(`/admin/bookings/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify({ status })
+    });
+    toast(`Booking status updated to "${status}"`, 'success');
+    const b = _bookings.find(x => x.id === id);
+    if (b) b.status = status;
+    await loadStats();
+  } catch {
+    toast('Failed to update booking status', 'error');
+  }
+}
+
+// =====================================================
+// USERS
+// =====================================================
+async function loadUsers() {
+  try {
+    const { users = [] } = await apiCall('/admin/users');
+    _users = users;
+    renderUsers();
+  } catch { document.getElementById('usr-tbody').innerHTML = '<tr class="empty-row"><td colspan="6">Failed to load users</td></tr>'; }
+}
+
+function renderUsers() {
+  const search = document.getElementById('usr-search').value.toLowerCase();
+  let list = _users;
+  if (search) list = list.filter(u => u.name?.toLowerCase().includes(search) || u.email?.toLowerCase().includes(search));
+  document.getElementById('usr-count').textContent = list.length;
+
+  const tbody = document.getElementById('usr-tbody');
+  if (!list.length) { tbody.innerHTML = '<tr class="empty-row"><td colspan="6">No users found</td></tr>'; return; }
+  tbody.innerHTML = list.map(u => `
+    <tr>
+      <td><div style="font-weight:600;color:var(--maroon-dark)">${u.name||'—'}</div></td>
+      <td style="font-size:0.82rem">${u.email||'—'}</td>
+      <td style="font-size:0.82rem">${u.phone||'—'}</td>
+      <td style="font-size:0.82rem">${u.city||'—'}</td>
+      <td><span class="badge ${u.role==='admin'?'badge-gold':'badge-cat'}">${u.role||'customer'}</span></td>
+      <td style="font-size:0.75rem;color:var(--gray-500)">${fmtDate(u.created_at)}</td>
+    </tr>`).join('');
+}
+
+// =====================================================
+// HELPERS
+// =====================================================
+function previewImg(inputId, previewId) {
+  const val = document.getElementById(inputId).value;
+  const img = document.getElementById(previewId);
+  if (val) { img.src = val; img.style.display = 'block'; }
+  else img.style.display = 'none';
+}
+
+function fmtDate(d) {
+  if (!d) return '—';
+  return new Date(d).toLocaleDateString('en-PK', { year:'numeric', month:'short', day:'numeric' });
+}
+
+function debounce(fn, delay) {
+  let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), delay); };
+}
+
+function toast(msg, type='success') {
+  const area = document.getElementById('toast-area');
+  const t = document.createElement('div');
+  t.className = `toast-msg ${type}`;
+  t.textContent = (type==='success'?'✓ ':type==='error'?'✕ ':'i ') + msg;
+  area.appendChild(t);
+  setTimeout(() => t.remove(), 3500);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Services — Shaadi Bazaar Admin</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/admin.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body data-page="manage-services">
+
+<nav class="navbar">
+  <div class="container">
+    <a href="../index.html" class="navbar-brand"><span class="brand-name">Shaadi Bazaar</span></a>
+    <div class="nav-actions">
+      <span style="color:var(--gold);font-size:0.875rem">Admin: <span id="admin-name">Admin</span></span>
+      <a href="../index.html" class="btn-nav-login" style="font-size:0.8rem">← View Site</a>
+    </div>
+  </div>
+</nav>
+
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <div class="admin-sidebar-brand"><h2>Admin Panel</h2><p>Shaadi Bazaar</p></div>
+    <nav class="admin-nav">
+      <div class="admin-nav-group">
+        <a href="admin-dashboard.html" class="admin-nav-item"><span class="nav-icon">📊</span> Dashboard</a>
+      </div>
+      <div class="admin-nav-group">
+        <div class="admin-nav-group-title">Inventory</div>
+        <a href="manage-products.html" class="admin-nav-item"><span class="nav-icon">🛍️</span> Products</a>
+        <a href="manage-services.html" class="admin-nav-item active"><span class="nav-icon">📷</span> Services</a>
+      </div>
+      <div class="admin-nav-group">
+        <a href="manage-orders.html" class="admin-nav-item"><span class="nav-icon">📦</span> Orders</a>
+      </div>
+    </nav>
+    <div class="admin-sidebar-footer">
+      <button class="admin-logout-btn" id="admin-logout-btn"><span class="nav-icon">🚪</span> Logout</button>
+    </div>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-page-header">
+      <div>
+        <h1>Manage Services</h1>
+        <p>Add, edit, and delete wedding services</p>
+      </div>
+      <button class="btn btn-gold" id="add-service-btn">+ Add New Service</button>
+    </div>
+
+    <div class="admin-table-card">
+      <div class="admin-table-header">
+        <h3>All Services (<span id="services-total-count">0</span>)</h3>
+        <div class="admin-search">
+          <input type="text" id="admin-service-search" placeholder="Search services...">
+          <button>Search</button>
+        </div>
+      </div>
+      <div class="admin-table-wrapper">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Title / Provider</th>
+              <th>Category</th>
+              <th>City</th>
+              <th>Price/Day</th>
+              <th>Rating</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="services-tbody">
+            <tr><td colspan="7" class="text-center"><div class="spinner"></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Add/Edit Service Modal -->
+<div class="modal-overlay hidden" id="service-modal">
+  <div class="modal admin-modal">
+    <div class="modal-header">
+      <h3 id="service-modal-title">Add New Service</h3>
+      <button class="modal-close" id="service-modal-close">✕</button>
+    </div>
+    <form id="service-form">
+      <div class="admin-form-grid">
+        <div class="form-group full-width">
+          <label class="form-label">Service Title *</label>
+          <input type="text" id="service-title-input" class="form-control" placeholder="e.g. Royal Moments Photography" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Provider/Company Name *</label>
+          <input type="text" id="service-provider-input" class="form-control" placeholder="Ahmed Studios" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Category *</label>
+          <select id="service-cat-input" class="form-control" required>
+            <option value="">Select category</option>
+            <option value="photographer">Photographer</option>
+            <option value="decorator">Decorator</option>
+            <option value="catering">Catering</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">City *</label>
+          <input type="text" id="service-city-input" class="form-control" placeholder="Karachi" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Price Per Day (PKR) *</label>
+          <input type="number" id="service-price-input" class="form-control" placeholder="45000" min="0" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Rating (1-5)</label>
+          <input type="number" id="service-rating-input" class="form-control" placeholder="4.5" min="1" max="5" step="0.1">
+        </div>
+        <div class="form-group full-width">
+          <label class="form-label">Description</label>
+          <textarea id="service-desc-input" class="form-control" rows="3" placeholder="Service description..."></textarea>
+        </div>
+        <div class="form-group full-width">
+          <label class="form-label">Image URL</label>
+          <input type="url" id="service-image-url" class="form-control" placeholder="https://images.unsplash.com/...">
+        </div>
+      </div>
+      <div style="display:flex;gap:1rem;margin-top:1.5rem">
+        <button type="submit" class="btn btn-primary" id="service-save-btn">Save Service</button>
+        <button type="button" class="btn btn-outline" onclick="closeServiceModal()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="toast-container"></div>
+<script src="../js/config.js"></script>
+<script src="../js/admin.js"></script>
+</body>
+</html>

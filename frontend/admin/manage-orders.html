@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Orders — Shaadi Bazaar Admin</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/admin.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body data-page="manage-orders">
+
+<nav class="navbar">
+  <div class="container">
+    <a href="../index.html" class="navbar-brand"><span class="brand-name">Shaadi Bazaar</span></a>
+    <div class="nav-actions">
+      <span style="color:var(--gold);font-size:0.875rem">Admin: <span id="admin-name">Admin</span></span>
+      <a href="../index.html" class="btn-nav-login" style="font-size:0.8rem">← View Site</a>
+    </div>
+  </div>
+</nav>
+
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <div class="admin-sidebar-brand"><h2>Admin Panel</h2><p>Shaadi Bazaar</p></div>
+    <nav class="admin-nav">
+      <div class="admin-nav-group">
+        <a href="admin-dashboard.html" class="admin-nav-item"><span class="nav-icon">📊</span> Dashboard</a>
+      </div>
+      <div class="admin-nav-group">
+        <div class="admin-nav-group-title">Inventory</div>
+        <a href="manage-products.html" class="admin-nav-item"><span class="nav-icon">🛍️</span> Products</a>
+        <a href="manage-services.html" class="admin-nav-item"><span class="nav-icon">📷</span> Services</a>
+      </div>
+      <div class="admin-nav-group">
+        <div class="admin-nav-group-title">Transactions</div>
+        <a href="manage-orders.html" class="admin-nav-item active"><span class="nav-icon">📦</span> Orders</a>
+      </div>
+    </nav>
+    <div class="admin-sidebar-footer">
+      <button class="admin-logout-btn" id="admin-logout-btn"><span class="nav-icon">🚪</span> Logout</button>
+    </div>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-page-header">
+      <div>
+        <h1>Manage Orders</h1>
+        <p>View and update all customer orders</p>
+      </div>
+      <div style="display:flex;gap:0.75rem;align-items:center">
+        <select class="sort-select" id="order-status-filter" style="border-radius:8px">
+          <option value="">All Status</option>
+          <option value="pending">Pending</option>
+          <option value="confirmed">Confirmed</option>
+          <option value="delivered">Delivered</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="admin-table-card">
+      <div class="admin-table-header">
+        <h3>All Orders (<span id="orders-total-count">0</span>)</h3>
+        <div class="admin-search">
+          <input type="text" id="admin-order-search" placeholder="Search by name or ID...">
+          <button>Search</button>
+        </div>
+      </div>
+      <div class="admin-table-wrapper">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Customer</th>
+              <th>Amount</th>
+              <th>City</th>
+              <th>Payment</th>
+              <th>Status</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody id="orders-tbody">
+            <tr><td colspan="7" class="text-center"><div class="spinner"></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="toast-container"></div>
+<script src="../js/config.js"></script>
+<script src="../js/admin.js"></script>
+</body>
+</html>

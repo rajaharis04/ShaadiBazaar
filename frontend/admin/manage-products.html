@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Products — Shaadi Bazaar Admin</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/admin.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body data-page="manage-products">
+
+<nav class="navbar">
+  <div class="container">
+    <a href="../index.html" class="navbar-brand"><span class="brand-name">Shaadi Bazaar</span></a>
+    <div class="nav-actions">
+      <span style="color:var(--gold);font-size:0.875rem">Admin: <span id="admin-name">Admin</span></span>
+      <a href="../index.html" class="btn-nav-login" style="font-size:0.8rem">← View Site</a>
+    </div>
+  </div>
+</nav>
+
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <div class="admin-sidebar-brand"><h2>Admin Panel</h2><p>Shaadi Bazaar</p></div>
+    <nav class="admin-nav">
+      <div class="admin-nav-group">
+        <a href="admin-dashboard.html" class="admin-nav-item"><span class="nav-icon">📊</span> Dashboard</a>
+      </div>
+      <div class="admin-nav-group">
+        <div class="admin-nav-group-title">Inventory</div>
+        <a href="manage-products.html" class="admin-nav-item active"><span class="nav-icon">🛍️</span> Products</a>
+        <a href="manage-services.html" class="admin-nav-item"><span class="nav-icon">📷</span> Services</a>
+      </div>
+      <div class="admin-nav-group">
+        <a href="manage-orders.html" class="admin-nav-item"><span class="nav-icon">📦</span> Orders</a>
+      </div>
+    </nav>
+    <div class="admin-sidebar-footer">
+      <button class="admin-logout-btn" id="admin-logout-btn"><span class="nav-icon">🚪</span> Logout</button>
+    </div>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-page-header">
+      <div>
+        <h1>Manage Products</h1>
+        <p>Add, edit, and delete wedding products</p>
+      </div>
+      <button class="btn btn-gold" id="add-product-btn">+ Add New Product</button>
+    </div>
+
+    <div class="admin-table-card">
+      <div class="admin-table-header">
+        <h3>All Products (<span id="products-total-count">0</span>)</h3>
+        <div class="admin-table-toolbar">
+          <div class="admin-search">
+            <input type="text" id="admin-product-search" placeholder="Search products...">
+            <button>Search</button>
+          </div>
+        </div>
+      </div>
+      <div class="admin-table-wrapper">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th class="sortable">Name</th>
+              <th>Category</th>
+              <th class="sortable">Price</th>
+              <th>Stock</th>
+              <th>Featured</th>
+              <th>Added</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="products-tbody">
+            <tr><td colspan="8" class="text-center"><div class="spinner"></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Add/Edit Product Modal -->
+<div class="modal-overlay hidden" id="product-modal">
+  <div class="modal admin-modal">
+    <div class="modal-header">
+      <h3 id="modal-title">Add New Product</h3>
+      <button class="modal-close" id="product-modal-close">✕</button>
+    </div>
+    <form id="product-form">
+      <div class="admin-form-grid">
+        <div class="form-group full-width">
+          <label class="form-label">Product Name *</label>
+          <input type="text" id="product-name-input" class="form-control" placeholder="e.g. Royal Bridal Lehnga" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Category *</label>
+          <select id="product-category-input" class="form-control" required>
+            <option value="">Select category</option>
+            <option value="bridal">Bridal</option>
+            <option value="jewellery">Jewellery</option>
+            <option value="mehndi">Mehndi</option>
+            <option value="decor">Decor</option>
+            <option value="baraat">Baraat</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Price (PKR) *</label>
+          <input type="number" id="product-price-input" class="form-control" placeholder="25000" min="0" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Stock Quantity</label>
+          <input type="number" id="product-stock-input" class="form-control" placeholder="10" min="0">
+        </div>
+        <div class="form-group full-width">
+          <label class="form-label">Description</label>
+          <textarea id="product-desc-input" class="form-control" rows="3" placeholder="Product description..."></textarea>
+        </div>
+        <div class="form-group full-width">
+          <label class="form-label">Image URL</label>
+          <input type="url" id="product-image-url" class="form-control" placeholder="https://images.unsplash.com/...">
+          <div class="image-preview-box mt-2">
+            <img id="product-image-preview" src="" alt="" style="display:none">
+            <div class="image-preview-placeholder" id="img-placeholder">
+              <p>Enter image URL above to preview</p>
+            </div>
+          </div>
+        </div>
+        <div class="form-group full-width">
+          <div class="toggle-switch">
+            <input type="checkbox" id="product-featured-toggle" class="toggle-input">
+            <label for="product-featured-toggle" class="toggle-slider"></label>
+            <span class="toggle-label">Featured Product (shows on homepage)</span>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;gap:1rem;margin-top:1.5rem">
+        <button type="submit" class="btn btn-primary" id="product-save-btn">Save Product</button>
+        <button type="button" class="btn btn-outline" id="product-modal-cancel" onclick="closeProductModal()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="toast-container"></div>
+<script src="../js/config.js"></script>
+<script src="../js/admin.js"></script>
+<script>
+// Handle image preview
+document.getElementById('product-image-url')?.addEventListener('input', (e) => {
+  const img = document.getElementById('product-image-preview');
+  const placeholder = document.getElementById('img-placeholder');
+  if (e.target.value) {
+    img.src = e.target.value;
+    img.style.display = 'block';
+    placeholder.style.display = 'none';
+  } else {
+    img.style.display = 'none';
+    placeholder.style.display = 'block';
+  }
+});
+</script>
+</body>
+</html>

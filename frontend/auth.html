@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Account — Shaadi Bazaar</title>
+  <meta name="description" content="Sign in, create an account, or access admin panel on Shaadi Bazaar — Pakistan's Premier Wedding Marketplace.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ========================================================
+       AUTH PAGE — Unified Sign In / Sign Up / Admin (Light Theme)
+       ======================================================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold:      #D4AF37;
+      --gold-dark: #B8960C;
+      --gold-glow: rgba(212,175,55,0.15);
+      --maroon:    #8B0000;
+      --maroon-dark: #5C0000;
+      --bg:        #FFF8F0; /* Cream background matching the main site */
+      --surface:   #FFFFFF; /* White card surface */
+      --surface2:  #F9F3EC; /* Light cream inputs */
+      --border:    #EDE0D4; /* Warm neutral border */
+      --text:      #1A0A00; /* Soft black text */
+      --muted:     #5D4E42; /* Soft warm gray for muted text */
+      --radius:    12px;
+      --error:     #C0392B;
+      --success:   #2D6A4F;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      overflow-x: hidden;
+      color: var(--text);
+    }
+
+    /* Ambient background blobs */
+    body::before, body::after {
+      content: '';
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    body::before {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(139,0,0,0.04) 0%, transparent 70%);
+      top: -150px; left: -150px;
+    }
+    body::after {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(212,175,55,0.06) 0%, transparent 70%);
+      bottom: -100px; right: -100px;
+    }
+
+    /* ── Wrapper ── */
+    .auth-wrapper {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 480px;
+    }
+
+    /* ── Brand Header ── */
+    .auth-brand {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .auth-brand a {
+      text-decoration: none;
+      display: inline-block;
+    }
+    .brand-logo {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      color: var(--maroon-dark);
+      background: linear-gradient(135deg, var(--maroon), var(--gold-dark));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .brand-tagline {
+      color: var(--muted);
+      font-size: 0.78rem;
+      margin-top: 4px;
+      letter-spacing: 0.3px;
+    }
+
+    /* ── Tab Toggles ── */
+    .auth-tabs {
+      display: flex;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 5px;
+      margin-bottom: 24px;
+      gap: 4px;
+    }
+    .auth-tab {
+      flex: 1;
+      padding: 10px 8px;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      white-space: nowrap;
+    }
+    .auth-tab:hover {
+      color: var(--maroon);
+      background: rgba(139,0,0,0.03);
+    }
+    .auth-tab.active {
+      background: linear-gradient(135deg, var(--maroon), var(--maroon-dark));
+      color: #ffffff;
+      font-weight: 700;
+      box-shadow: 0 4px 15px rgba(139,0,0,0.25);
+    }
+
+    /* ── Card ── */
+    .auth-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 36px 32px;
+      box-shadow: 0 20px 50px rgba(139,0,0,0.08), 0 0 0 1px rgba(139,0,0,0.02);
+      backdrop-filter: blur(10px);
+    }
+
+    /* ── Panel toggle ── */
+    .auth-panel { display: none; }
+    .auth-panel.active { display: block; }
+
+    /* ── Section title ── */
+    .panel-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--maroon-dark);
+      margin-bottom: 4px;
+    }
+    .panel-subtitle {
+      color: var(--muted);
+      font-size: 0.82rem;
+      margin-bottom: 24px;
+    }
+
+    /* ── Form Elements ── */
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 7px;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+    }
+    .form-control {
+      width: 100%;
+      padding: 12px 14px;
+      background: var(--surface2);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.9rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+    .form-control::placeholder { color: #A89B8F; }
+    .form-control:focus {
+      border-color: var(--maroon);
+      box-shadow: 0 0 0 3px rgba(139,0,0,0.1);
+    }
+    select.form-control { cursor: pointer; }
+    select.form-control option { background: var(--surface); }
+
+    /* ── Password field ── */
+    .password-wrap {
+      position: relative;
+    }
+    .password-wrap .form-control {
+      padding-right: 52px;
+    }
+    .pw-toggle {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 4px 6px;
+      border-radius: 6px;
+      transition: color 0.2s;
+      font-family: 'Poppins', sans-serif;
+    }
+    .pw-toggle:hover { color: var(--maroon); }
+
+    /* ── OTP section ── */
+    .otp-section {
+      display: none;
+    }
+    .otp-section.visible {
+      display: block;
+    }
+    .otp-info {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 14px;
+      padding: 10px 14px;
+      background: rgba(139,0,0,0.03);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+    .otp-info span { color: var(--maroon); font-weight: 600; }
+    .otp-input-row {
+      display: flex;
+      gap: 8px;
+      align-items: flex-end;
+    }
+    .otp-input-row .form-group {
+      flex: 1;
+      margin-bottom: 0;
+    }
+    .resend-btn {
+      padding: 12px 14px;
+      background: transparent;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--maroon);
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      font-family: 'Poppins', sans-serif;
+      transition: all 0.2s;
+    }
+    .resend-btn:hover { border-color: var(--maroon); background: rgba(139,0,0,0.04); }
+    .resend-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* ── Password strength ── */
+    .strength-wrap { margin-top: 6px; }
+    .strength-bar-bg {
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .strength-bar {
+      height: 100%;
+      width: 0%;
+      border-radius: 2px;
+      transition: width 0.3s, background 0.3s;
+    }
+    .strength-label {
+      font-size: 0.7rem;
+      margin-top: 4px;
+      color: var(--muted);
+    }
+    .strength-bar.weak   { width: 25%; background: var(--error); }
+    .strength-bar.fair   { width: 50%; background: var(--warning); }
+    .strength-bar.good   { width: 75%; background: var(--gold); }
+    .strength-bar.strong { width: 100%; background: var(--success); }
+
+    /* ── Alert message ── */
+    .auth-alert {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 14px;
+      border-radius: 10px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      margin-bottom: 18px;
+    }
+    .auth-alert.error   { background: rgba(192,57,43,0.08); border: 1px solid rgba(192,57,43,0.2); color: var(--error); display: flex; }
+    .auth-alert.success { background: rgba(45,106,79,0.08); border: 1px solid rgba(45,106,79,0.2); color: var(--success); display: flex; }
+
+    /* ── Submit Button ── */
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--maroon), var(--maroon-dark));
+      color: #ffffff;
+      border: none;
+      border-radius: var(--radius);
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.25s;
+      margin-top: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+    .submit-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .submit-btn:hover::before { opacity: 1; }
+    .submit-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 25px rgba(139,0,0,0.25); }
+    .submit-btn:active { transform: translateY(0); }
+    .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .submit-btn .spinner {
+      display: inline-block;
+      width: 14px; height: 14px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+
+    /* ── Admin badge ── */
+    .admin-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(139,0,0,0.05);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 5px 12px;
+      font-size: 0.75rem;
+      color: var(--maroon);
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    .admin-badge::before { content: '🔒'; font-size: 0.7rem; }
+
+    /* ── Footer link ── */
+    .auth-footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .auth-footer a {
+      color: var(--maroon);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .auth-footer a:hover { text-decoration: underline; }
+
+    /* ── Divider ── */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 20px 0;
+      color: var(--muted);
+      font-size: 0.75rem;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── Terms ── */
+    .terms {
+      font-size: 0.72rem;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 14px;
+    }
+    .terms a { color: var(--maroon); text-decoration: none; }
+
+    /* ── Back to home ── */
+    .back-home {
+      text-align: center;
+      margin-top: 22px;
+    }
+    .back-home a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.8rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: color 0.2s;
+    }
+    .back-home a:hover { color: var(--maroon); }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* ── Step indicator for signup ── */
+    .step-indicator {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-bottom: 22px;
+    }
+    .step-dot {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--muted);
+      transition: all 0.3s;
+      flex-shrink: 0;
+    }
+    .step-dot.done  { background: var(--maroon); border-color: var(--maroon); color: #ffffff; }
+    .step-dot.active { border-color: var(--maroon); color: var(--maroon); }
+    .step-line {
+      flex: 1;
+      height: 2px;
+      background: var(--border);
+      transition: background 0.3s;
+    }
+    .step-line.done { background: var(--maroon); }
+    .step-label {
+      font-size: 0.65rem;
+      color: var(--muted);
+      margin-top: 4px;
+      text-align: center;
+    }
+    .step-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    @media (max-width: 520px) {
+      .auth-card { padding: 26px 20px; }
+      .form-row { grid-template-columns: 1fr; }
+      .auth-tab { font-size: 0.75rem; padding: 9px 4px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="auth-wrapper">
+
+  <!-- Brand -->
+  <div class="auth-brand">
+    <a href="index.html">
+      <div class="brand-logo">Shaadi Bazaar</div>
+      <div class="brand-tagline">Pakistan's Premier Wedding Marketplace</div>
+    </a>
+  </div>
+
+  <!-- Tab toggles -->
+  <div class="auth-tabs" role="tablist">
+    <button class="auth-tab active" id="tab-signin" role="tab" onclick="switchTab('signin')">Sign In</button>
+    <button class="auth-tab" id="tab-signup" role="tab" onclick="switchTab('signup')">Create Account</button>
+    <button class="auth-tab" id="tab-admin" role="tab" onclick="switchTab('admin')">Admin</button>
+  </div>
+
+  <!-- Card -->
+  <div class="auth-card">
+
+    <!-- ====================================================
+         SIGN IN PANEL
+         ==================================================== -->
+    <div class="auth-panel active" id="panel-signin">
+      <h1 class="panel-title">Welcome back</h1>
+      <p class="panel-subtitle">Sign in to your Shaadi Bazaar account</p>
+
+      <div class="auth-alert" id="signin-alert"></div>
+
+      <form id="signin-form" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="si-email">Email Address</label>
+          <input type="email" id="si-email" class="form-control" placeholder="you@example.com" autocomplete="email" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="si-password">Password</label>
+          <div class="password-wrap">
+            <input type="password" id="si-password" class="form-control" placeholder="Your password" autocomplete="current-password" required>
+            <button type="button" class="pw-toggle" onclick="togglePw('si-password', this)">Show</button>
+          </div>
+        </div>
+
+        <button type="submit" class="submit-btn" id="signin-btn">Sign In</button>
+      </form>
+
+      <div class="auth-footer">
+        Don't have an account? <a href="#" onclick="switchTab('signup'); return false;">Create one free</a>
+      </div>
+    </div>
+
+    <!-- ====================================================
+         SIGN UP PANEL (2-step: Info → OTP)
+         ==================================================== -->
+    <div class="auth-panel" id="panel-signup">
+      <h1 class="panel-title">Create Account</h1>
+      <p class="panel-subtitle">Join thousands of happy customers</p>
+
+      <!-- Step indicator -->
+      <div class="step-indicator" id="step-indicator">
+        <div class="step-wrap">
+          <div class="step-dot active" id="sdot-1">1</div>
+          <div class="step-label">Details</div>
+        </div>
+        <div class="step-line" id="sline-1"></div>
+        <div class="step-wrap">
+          <div class="step-dot" id="sdot-2">2</div>
+          <div class="step-label">Verify</div>
+        </div>
+        <div class="step-line" id="sline-2"></div>
+        <div class="step-wrap">
+          <div class="step-dot" id="sdot-3">3</div>
+          <div class="step-label">Done</div>
+        </div>
+      </div>
+
+      <div class="auth-alert" id="signup-alert"></div>
+
+      <!-- Step 1 — Account Info -->
+      <div id="su-step1">
+        <form id="signup-form-step1" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="su-name">Full Name</label>
+              <input type="text" id="su-name" class="form-control" placeholder="Ahmed Khan" autocomplete="name" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="su-phone">Phone</label>
+              <input type="tel" id="su-phone" class="form-control" placeholder="03xx-xxxxxxx" autocomplete="tel">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="su-email">Email Address</label>
+            <input type="email" id="su-email" class="form-control" placeholder="you@example.com" autocomplete="email" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="su-city">City</label>
+            <select id="su-city" class="form-control">
+              <option value="">Select your city</option>
+              <option>Karachi</option>
+              <option>Lahore</option>
+              <option>Islamabad</option>
+              <option>Rawalpindi</option>
+              <option>Faisalabad</option>
+              <option>Multan</option>
+              <option>Peshawar</option>
+              <option>Quetta</option>
+              <option>Hyderabad</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="su-password">Password</label>
+            <div class="password-wrap">
+              <input type="password" id="su-password" class="form-control" placeholder="Min. 8 characters" autocomplete="new-password" required oninput="checkStrength(this.value)">
+              <button type="button" class="pw-toggle" onclick="togglePw('su-password', this)">Show</button>
+            </div>
+            <div class="strength-wrap">
+              <div class="strength-bar-bg"><div class="strength-bar" id="strength-bar"></div></div>
+              <div class="strength-label" id="strength-label"></div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="su-confirm">Confirm Password</label>
+            <div class="password-wrap">
+              <input type="password" id="su-confirm" class="form-control" placeholder="Repeat your password" autocomplete="new-password" required>
+              <button type="button" class="pw-toggle" onclick="togglePw('su-confirm', this)">Show</button>
+            </div>
+          </div>
+
+          <button type="submit" class="submit-btn" id="sendotp-btn">Send Verification Code</button>
+        </form>
+        <p class="terms">By creating an account you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></p>
+      </div>
+
+      <!-- Step 2 — OTP Verification -->
+      <div id="su-step2" style="display:none;">
+        <div class="otp-info">
+          Verification code sent to <span id="otp-email-display"></span>. Check your inbox (and spam folder).
+        </div>
+
+        <form id="signup-form-step2" novalidate>
+          <div class="otp-input-row">
+            <div class="form-group">
+              <label class="form-label" for="su-otp">Enter 6-digit OTP</label>
+              <input type="text" id="su-otp" class="form-control" placeholder="000000" maxlength="6" inputmode="numeric" pattern="[0-9]{6}" autocomplete="one-time-code" required>
+            </div>
+            <button type="button" class="resend-btn" id="resend-btn" onclick="resendOTP()">Resend</button>
+          </div>
+
+          <div style="height:12px;"></div>
+          <button type="submit" class="submit-btn" id="verify-btn">Verify & Create Account</button>
+        </form>
+
+        <div class="auth-footer" style="margin-top:14px;">
+          <a href="#" onclick="goBackToStep1(); return false;">← Change email</a>
+        </div>
+      </div>
+
+      <div class="auth-footer" style="margin-top:18px;">
+        Already have an account? <a href="#" onclick="switchTab('signin'); return false;">Sign in</a>
+      </div>
+    </div>
+
+    <!-- ====================================================
+         ADMIN PANEL
+         ==================================================== -->
+    <div class="auth-panel" id="panel-admin">
+      <div class="admin-badge">Restricted Access</div>
+      <h1 class="panel-title">Admin Login</h1>
+      <p class="panel-subtitle">For authorized personnel only</p>
+
+      <div class="auth-alert" id="admin-alert"></div>
+
+      <form id="admin-form" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="ad-email">Admin Email</label>
+          <input type="email" id="ad-email" class="form-control" placeholder="admin@shaadibazaar.pk" autocomplete="username" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="ad-password">Admin Password</label>
+          <div class="password-wrap">
+            <input type="password" id="ad-password" class="form-control" placeholder="Admin password" autocomplete="current-password" required>
+            <button type="button" class="pw-toggle" onclick="togglePw('ad-password', this)">Show</button>
+          </div>
+        </div>
+
+        <button type="submit" class="submit-btn" id="admin-btn">Access Admin Panel</button>
+      </form>
+    </div>
+
+  </div><!-- /.auth-card -->
+
+  <div class="back-home">
+    <a href="index.html">← Back to Home</a>
+  </div>
+
+</div><!-- /.auth-wrapper -->
+
+<div class="toast-container" id="toast-container"></div>
+
+<script src="js/config.js"></script>
+<script>
+// ============================================================
+// AUTH PAGE SCRIPT
+// ============================================================
+
+// Signup state
+let signupData = {}; // stores form data between steps
+
+// ── Redirect if already logged in ──────────────────────────
+(function() {
+  const user = getCurrentUser();
+  if (user) {
+    if (user.role === 'admin') {
+      window.location.href = 'admin/admin-dashboard.html';
+    } else {
+      window.location.href = 'dashboard.html';
+    }
+  }
+})();
+
+// ── Tab switching ───────────────────────────────────────────
+function switchTab(tab) {
+  document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.auth-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  document.getElementById('panel-' + tab).classList.add('active');
+
+  // Clear all alerts
+  ['signin', 'signup', 'admin'].forEach(id => {
+    const el = document.getElementById(id + '-alert');
+    if (el) { el.className = 'auth-alert'; el.textContent = ''; }
+  });
+}
+
+// ── Password visibility toggle ──────────────────────────────
+function togglePw(inputId, btn) {
+  const input = document.getElementById(inputId);
+  input.type = input.type === 'password' ? 'text' : 'password';
+  btn.textContent = input.type === 'password' ? 'Show' : 'Hide';
+}
+
+// ── Password strength ───────────────────────────────────────
+function checkStrength(val) {
+  const bar   = document.getElementById('strength-bar');
+  const label = document.getElementById('strength-label');
+  if (!bar) return;
+  let score = 0;
+  if (val.length >= 8)            score++;
+  if (/[A-Z]/.test(val))          score++;
+  if (/[0-9]/.test(val))          score++;
+  if (/[^a-zA-Z0-9]/.test(val))   score++;
+
+  const levels = [
+    { cls: '',       text: '' },
+    { cls: 'weak',   text: 'Weak' },
+    { cls: 'fair',   text: 'Fair' },
+    { cls: 'good',   text: 'Good' },
+    { cls: 'strong', text: 'Strong' },
+  ];
+  const l = levels[score] || levels[0];
+  bar.className   = 'strength-bar ' + l.cls;
+  label.textContent = l.text;
+}
+
+// ── Alert helper ────────────────────────────────────────────
+function showAlert(id, msg, type = 'error') {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.className = 'auth-alert ' + type;
+  el.innerHTML = (type === 'error' ? '&#x26A0; ' : '&#x2713; ') + msg;
+}
+
+// ── Button loading ──────────────────────────────────────────
+function setBtnLoading(btn, loading, originalText) {
+  if (loading) {
+    btn.disabled = true;
+    btn.dataset.orig = btn.innerHTML;
+    btn.innerHTML = '<span class="spinner"></span> Please wait...';
+  } else {
+    btn.disabled = false;
+    btn.innerHTML = originalText || btn.dataset.orig || btn.innerHTML;
+  }
+}
+
+// ── Update step indicator ───────────────────────────────────
+function setStep(step) {
+  for (let i = 1; i <= 3; i++) {
+    const dot  = document.getElementById('sdot-' + i);
+    const line = document.getElementById('sline-' + i);
+    if (i < step) {
+      dot.className  = 'step-dot done';
+      if (line) line.className = 'step-line done';
+    } else if (i === step) {
+      dot.className  = 'step-dot active';
+      if (line) line.className = 'step-line';
+    } else {
+      dot.className  = 'step-dot';
+      if (line) line.className = 'step-line';
+    }
+  }
+}
+
+// ── Go back to step 1 ──────────────────────────────────────
+function goBackToStep1() {
+  document.getElementById('su-step1').style.display = 'block';
+  document.getElementById('su-step2').style.display = 'none';
+  setStep(1);
+}
+
+// ─────────────────────────────────────────────────────────────
+// SIGN IN FORM
+// ─────────────────────────────────────────────────────────────
+document.getElementById('signin-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email    = document.getElementById('si-email').value.trim();
+  const password = document.getElementById('si-password').value;
+  const btn      = document.getElementById('signin-btn');
+
+  if (!email || !password) {
+    showAlert('signin-alert', 'Please fill in all fields');
+    return;
+  }
+
+  setBtnLoading(btn, true);
+  document.getElementById('signin-alert').className = 'auth-alert'; // hide
+
+  try {
+    const data = await apiCall('/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({ email, password })
+    });
+
+    localStorage.setItem('sb_token', data.token);
+    localStorage.setItem('sb_user', JSON.stringify(data.user));
+
+    showToast('Welcome back, ' + (data.user.name || 'User') + '!', 'success');
+
+    setTimeout(() => {
+      if (data.user.role === 'admin') {
+        window.location.href = 'admin/admin-dashboard.html';
+      } else {
+        const redirect = new URLSearchParams(window.location.search).get('redirect') || 'dashboard.html';
+        window.location.href = redirect;
+      }
+    }, 800);
+  } catch (err) {
+    showAlert('signin-alert', err.message || 'Invalid email or password');
+    setBtnLoading(btn, false, 'Sign In');
+  }
+});
+
+// ─────────────────────────────────────────────────────────────
+// SIGN UP — STEP 1: Send OTP
+// ─────────────────────────────────────────────────────────────
+document.getElementById('signup-form-step1').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const name     = document.getElementById('su-name').value.trim();
+  const email    = document.getElementById('su-email').value.trim();
+  const phone    = document.getElementById('su-phone').value.trim();
+  const city     = document.getElementById('su-city').value;
+  const password = document.getElementById('su-password').value;
+  const confirm  = document.getElementById('su-confirm').value;
+  const btn      = document.getElementById('sendotp-btn');
+
+  document.getElementById('signup-alert').className = 'auth-alert';
+
+  if (!name || !email || !password || !confirm) {
+    showAlert('signup-alert', 'Name, email and password are required');
+    return;
+  }
+  if (password !== confirm) {
+    showAlert('signup-alert', 'Passwords do not match');
+    return;
+  }
+  if (password.length < 8) {
+    showAlert('signup-alert', 'Password must be at least 8 characters');
+    return;
+  }
+
+  // Save for step 2
+  signupData = { name, email, phone, city, password };
+
+  setBtnLoading(btn, true);
+
+  try {
+    await apiCall('/auth/send-otp', {
+      method: 'POST',
+      body: JSON.stringify({ email, name })
+    });
+
+    // Move to step 2
+    document.getElementById('otp-email-display').textContent = email;
+    document.getElementById('su-step1').style.display = 'none';
+    document.getElementById('su-step2').style.display = 'block';
+    setStep(2);
+    setBtnLoading(btn, false, 'Send Verification Code');
+
+  } catch (err) {
+    showAlert('signup-alert', err.message || 'Failed to send OTP. Try again.');
+    setBtnLoading(btn, false, 'Send Verification Code');
+  }
+});
+
+// ─────────────────────────────────────────────────────────────
+// SIGN UP — STEP 2: Verify OTP & Create Account
+// ─────────────────────────────────────────────────────────────
+document.getElementById('signup-form-step2').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const otp = document.getElementById('su-otp').value.trim();
+  const btn = document.getElementById('verify-btn');
+
+  document.getElementById('signup-alert').className = 'auth-alert';
+
+  if (!otp || otp.length !== 6) {
+    showAlert('signup-alert', 'Please enter the 6-digit OTP from your email');
+    return;
+  }
+
+  setBtnLoading(btn, true);
+
+  try {
+    await apiCall('/auth/register', {
+      method: 'POST',
+      body: JSON.stringify({ ...signupData, otp })
+    });
+
+    setStep(3);
+    showAlert('signup-alert', 'Account created successfully! Signing you in...', 'success');
+
+    // Auto sign in
+    try {
+      const loginData = await apiCall('/auth/login', {
+        method: 'POST',
+        body: JSON.stringify({ email: signupData.email, password: signupData.password })
+      });
+      localStorage.setItem('sb_token', loginData.token);
+      localStorage.setItem('sb_user', JSON.stringify(loginData.user));
+      setTimeout(() => { window.location.href = 'dashboard.html'; }, 1200);
+    } catch (_) {
+      setTimeout(() => { switchTab('signin'); }, 1500);
+    }
+
+  } catch (err) {
+    showAlert('signup-alert', err.message || 'Invalid OTP. Please try again.');
+    setBtnLoading(btn, false, 'Verify & Create Account');
+  }
+});
+
+// ─────────────────────────────────────────────────────────────
+// Resend OTP
+// ─────────────────────────────────────────────────────────────
+async function resendOTP() {
+  const btn = document.getElementById('resend-btn');
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
+
+  try {
+    await apiCall('/auth/send-otp', {
+      method: 'POST',
+      body: JSON.stringify({ email: signupData.email, name: signupData.name })
+    });
+    showAlert('signup-alert', 'New OTP sent to your email', 'success');
+  } catch (err) {
+    showAlert('signup-alert', 'Failed to resend OTP. Try again.');
+  }
+
+  // Cooldown 30s
+  let countdown = 30;
+  const interval = setInterval(() => {
+    btn.textContent = `Resend (${countdown}s)`;
+    countdown--;
+    if (countdown < 0) {
+      clearInterval(interval);
+      btn.disabled = false;
+      btn.textContent = 'Resend';
+    }
+  }, 1000);
+}
+
+// ─────────────────────────────────────────────────────────────
+// ADMIN LOGIN
+// ─────────────────────────────────────────────────────────────
+document.getElementById('admin-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email    = document.getElementById('ad-email').value.trim();
+  const password = document.getElementById('ad-password').value;
+  const btn      = document.getElementById('admin-btn');
+
+  if (!email || !password) {
+    showAlert('admin-alert', 'Please fill in all fields');
+    return;
+  }
+
+  setBtnLoading(btn, true);
+  document.getElementById('admin-alert').className = 'auth-alert';
+
+  try {
+    const data = await apiCall('/auth/admin-login', {
+      method: 'POST',
+      body: JSON.stringify({ email, password })
+    });
+
+    localStorage.setItem('sb_token', data.token);
+    localStorage.setItem('sb_user', JSON.stringify(data.user));
+
+    showToast('Admin access granted!', 'success');
+    setTimeout(() => { window.location.href = 'admin/admin-dashboard.html'; }, 800);
+  } catch (err) {
+    showAlert('admin-alert', err.message || 'Invalid admin credentials');
+    setBtnLoading(btn, false, 'Access Admin Panel');
+  }
+});
+
+// ─────────────────────────────────────────────────────────────
+// Toast helper (override simple one)
+// ─────────────────────────────────────────────────────────────
+function showToast(msg, type = 'success') {
+  const c = document.getElementById('toast-container');
+  if (!c) return;
+  const t = document.createElement('div');
+  t.style.cssText = `
+    background:${type==='success'?'rgba(76,175,136,0.15)':'rgba(224,85,85,0.15)'};
+    border:1px solid ${type==='success'?'rgba(76,175,136,0.4)':'rgba(224,85,85,0.4)'};
+    color:${type==='success'?'#4caf88':'#e08585'};
+    padding:12px 18px; border-radius:12px; font-size:0.85rem; font-weight:500;
+    margin-top:8px; font-family:'Inter',sans-serif;
+  `;
+  t.textContent = (type === 'success' ? '✓ ' : '✕ ') + msg;
+  c.appendChild(t);
+  setTimeout(() => t.remove(), 3000);
+}
+
+// ─────────────────────────────────────────────────────────────
+// Check if tab param in URL (e.g. auth.html?tab=signup)
+// ─────────────────────────────────────────────────────────────
+(function() {
+  const tab = new URLSearchParams(window.location.search).get('tab');
+  if (tab && ['signin', 'signup', 'admin'].includes(tab)) {
+    switchTab(tab);
+  }
+})();
+</script>
+
+<style>
+  .toast-container {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+  }
+</style>
+</body>
+</html>

@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shaadi Bazaar — Pakistan's Premier Wedding Marketplace</title>
+  <meta name="description" content="Shaadi Bazaar is Pakistan's #1 wedding e-commerce platform. Shop bridal dresses, jewellery, mehndi, decor. Book photographers, decorators, and caterers for your perfect wedding.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/home.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body data-page="home">
+
+<!-- ============================================================
+     NAVBAR
+============================================================ -->
+<nav class="navbar" id="navbar">
+  <div class="container">
+    <a href="index.html" class="navbar-brand">
+      <span class="brand-name">Shaadi Bazaar</span>
+    </a>
+
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="products.html">Products</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="dashboard.html" id="nav-dashboard-link" style="display:none">Dashboard</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <a href="cart.html" class="nav-cart-btn" id="nav-cart-btn">
+        Cart
+        <span class="cart-badge" style="display:none">0</span>
+      </a>
+      <a href="auth.html" class="btn-nav-login" id="nav-login-btn">Login</a>
+      <button class="btn-nav-login" id="nav-logout-btn" style="display:none; background:transparent; border:1px solid var(--gold); color:var(--gold)">Logout</button>
+    </div>
+
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ============================================================
+     HERO SECTION
+============================================================ -->
+<main>
+<section class="hero" id="hero">
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-tag">
+        Pakistan's #1 Wedding Marketplace
+      </div>
+      <h1>Your Dream Wedding <span>Starts Here</span></h1>
+      <p>
+        Shop stunning bridal dresses, jewellery, mehndi, and décor. Book top photographers, 
+        decorators, and caterers — all in one place. Shaadi karein, khushiyon se!
+      </p>
+      <div class="hero-buttons">
+        <a href="products.html" class="btn btn-gold btn-lg">Shop Now</a>
+        <a href="services.html" class="btn btn-outline-gold btn-lg">Book Services</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat-item">
+          <span class="stat-number">500+</span>
+          <span class="stat-label">Products</span>
+        </div>
+        <div class="hero-stat-item">
+          <span class="stat-number">200+</span>
+          <span class="stat-label">Vendors</span>
+        </div>
+        <div class="hero-stat-item">
+          <span class="stat-number">50+</span>
+          <span class="stat-label">Cities</span>
+        </div>
+        <div class="hero-stat-item">
+          <span class="stat-number">5K+</span>
+          <span class="stat-label">Happy Couples</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     CATEGORIES STRIP
+============================================================ -->
+<section class="categories-strip">
+  <div class="container">
+    <div class="category-pills">
+      <a href="products.html?category=bridal" class="category-pill">
+        <div class="pill-icon">✦</div>
+        <span class="pill-name">Bridal</span>
+      </a>
+      <a href="products.html?category=jewellery" class="category-pill">
+        <div class="pill-icon">✦</div>
+        <span class="pill-name">Jewellery</span>
+      </a>
+      <a href="products.html?category=mehndi" class="category-pill">
+        <div class="pill-icon">✦</div>
+        <span class="pill-name">Mehndi</span>
+      </a>
+      <a href="products.html?category=decor" class="category-pill">
+        <div class="pill-icon">✦</div>
+        <span class="pill-name">Decor</span>
+      </a>
+      <a href="products.html?category=baraat" class="category-pill">
+        <div class="pill-icon">✦</div>
+        <span class="pill-name">Baraat</span>
+      </a>
+      <a href="services.html?category=photographer" class="category-pill">
+        <div class="pill-icon">✦</div>
+        <span class="pill-name">Photography</span>
+      </a>
+      <a href="services.html?category=decorator" class="category-pill">
+        <div class="pill-icon">✦</div>
+        <span class="pill-name">Decoration</span>
+      </a>
+      <a href="services.html?category=catering" class="category-pill">
+        <div class="pill-icon">✦</div>
+        <span class="pill-name">Catering</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FEATURED PRODUCTS
+============================================================ -->
+<section class="featured-section">
+  <div class="container">
+    <div class="section-title">
+      <div class="subtitle">Handpicked For You</div>
+      <h2>Featured Wedding Products</h2>
+      <div class="title-divider"></div>
+      <p>Discover our curated selection of premium bridal wear, jewellery, and wedding essentials</p>
+    </div>
+    <div class="products-grid" id="featured-products-grid">
+      <!-- Loaded via JS -->
+    </div>
+    <div class="text-center">
+      <a href="products.html" class="btn btn-outline">View All Products</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FEATURED SERVICES
+============================================================ -->
+<section class="services-section">
+  <div class="container">
+    <div class="section-title">
+      <div class="subtitle">Top Rated Professionals</div>
+      <h2>Featured Wedding Services</h2>
+      <div class="title-divider"></div>
+      <p>Pakistan's best photographers, decorators, and caterers — book them for your special day</p>
+    </div>
+    <div class="services-grid" id="featured-services-grid">
+      <!-- Loaded via JS -->
+    </div>
+    <div class="text-center">
+      <a href="services.html" class="btn btn-outline">View All Services</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     BUDGET CALCULATOR
+============================================================ -->
+<section class="budget-calculator" id="calculator">
+  <div class="container">
+    <div class="section-title">
+      <div class="subtitle" style="color:var(--gold-light)">Plan Your Budget</div>
+      <h2>Wedding Budget Calculator</h2>
+      <div class="title-divider" style="background:var(--gold)"></div>
+      <p style="color:rgba(255,248,240,0.7)">Estimate your wedding costs based on guest count and preferences</p>
+    </div>
+    <div class="calculator-card">
+      <div class="calc-grid">
+        <div class="calc-item">
+          <label for="calc-guests">Number of Guests</label>
+          <select id="calc-guests" onchange="calcBudget()">
+            <option value="100">Up to 100</option>
+            <option value="200" selected>100–200</option>
+            <option value="300">200–300</option>
+            <option value="500">300–500</option>
+            <option value="800">500–800</option>
+            <option value="1000">1000+</option>
+          </select>
+        </div>
+        <div class="calc-item">
+          <label for="calc-city">City</label>
+          <select id="calc-city" onchange="calcBudget()">
+            <option value="karachi">Karachi</option>
+            <option value="lahore">Lahore</option>
+            <option value="islamabad">Islamabad</option>
+            <option value="other">Other City</option>
+          </select>
+        </div>
+        <div class="calc-item">
+          <label for="calc-venue">Venue Type</label>
+          <select id="calc-venue" onchange="calcBudget()">
+            <option value="home">Home/Lawn</option>
+            <option value="hall">Marriage Hall</option>
+            <option value="hotel">5-Star Hotel</option>
+          </select>
+        </div>
+        <div class="calc-item">
+          <label for="calc-events">Number of Events</label>
+          <select id="calc-events" onchange="calcBudget()">
+            <option value="2">2 (Mehndi + Barat)</option>
+            <option value="3" selected>3 (Dholki + Mehndi + Barat)</option>
+            <option value="4">4 (+ Walima)</option>
+            <option value="5">5 (Full Events)</option>
+          </select>
+        </div>
+      </div>
+      <div class="budget-result" id="budget-result">
+        <h3>Estimated Budget Breakdown</h3>
+        <div class="budget-breakdown" id="budget-breakdown">
+          <!-- Updated by JS -->
+        </div>
+        <div class="budget-total" id="budget-total">
+          <span>Total Estimated Cost</span>
+          <span id="budget-total-amount">Rs. 0</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     CITY FILTER
+============================================================ -->
+<section class="city-filter-section">
+  <div class="container">
+    <div class="section-title" style="margin-bottom:1.5rem">
+      <div class="subtitle">Explore by City</div>
+      <h2>Find Vendors in Your City</h2>
+    </div>
+    <div class="city-pills">
+      <a href="services.html" class="city-pill active">All Cities</a>
+      <a href="services.html?city=karachi"   class="city-pill">Karachi</a>
+      <a href="services.html?city=lahore"    class="city-pill">Lahore</a>
+      <a href="services.html?city=islamabad" class="city-pill">Islamabad</a>
+      <a href="services.html?city=rawalpindi" class="city-pill">Rawalpindi</a>
+      <a href="services.html?city=faisalabad" class="city-pill">Faisalabad</a>
+      <a href="services.html?city=multan"    class="city-pill">Multan</a>
+      <a href="services.html?city=peshawar"  class="city-pill">Peshawar</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     TESTIMONIALS
+============================================================ -->
+<section class="testimonials">
+  <div class="container">
+    <div class="section-title">
+      <div class="subtitle">💬 Happy Couples</div>
+      <h2>What Our Customers Say</h2>
+      <div class="title-divider"></div>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">Hamari shaadi ki poori shopping Shaadi Bazaar se ki. Bridal dress, jewellery, decor sab ek jagah mil gaya. Bohot pyari service!</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">F</div>
+          <div><div class="author-name">Fatima Ahmed</div><div class="author-city">📍 Karachi</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">Photographer booking itna easy tha! Bilal Ahmed Photography ne our baraat ke bohat amazing photos liye. Highly recommended!</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">A</div>
+          <div><div class="author-name">Ahmed Ali</div><div class="author-city">📍 Lahore</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★☆</div>
+        <p class="testimonial-text">Stage decoration was absolutely stunning. Royal Décor by Farid ne sab kuch perfect set kiya. Prices bhi bohot reasonable the.</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">S</div>
+          <div><div class="author-name">Sara Khan</div><div class="author-city">📍 Islamabad</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">Budget calculator ne hamare liye planning bohot easy kar di. 300 guests ke liye perfect vendors mil gaye. Shukriya Shaadi Bazaar!</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">U</div>
+          <div><div class="author-name">Usman Malik</div><div class="author-city">📍 Multan</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">Kundan jewellery set received was exactly as shown. Fast delivery and proper packaging. Will definitely shop again for valima!</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">Z</div>
+          <div><div class="author-name">Zara Hussain</div><div class="author-city">📍 Lahore</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">Royal Feast Catering ka khana mazedaar tha! 500 mehman the aur sab ne tarif ki. Punctual, professional, aur affordable!</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">R</div>
+          <div><div class="author-name">Rabia Siddiqui</div><div class="author-city">Karachi</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ============================================================
+     FOOTER
+============================================================ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="brand-name">Shaadi Bazaar</div>
+        <p>Pakistan's premier wedding marketplace. Shop everything for your perfect wedding day — from bridal wear to complete vendor bookings.</p>
+        <div class="footer-social">
+          <a href="#" class="social-link" title="Facebook">FB</a>
+          <a href="#" class="social-link" title="Instagram">IG</a>
+          <a href="#" class="social-link" title="WhatsApp">WA</a>
+          <a href="#" class="social-link" title="YouTube">YT</a>
+        </div>
+      </div>
+      <div>
+        <h4 class="footer-heading">Products</h4>
+        <ul class="footer-links">
+          <li><a href="products.html?category=bridal">Bridal Wear</a></li>
+          <li><a href="products.html?category=jewellery">Jewellery</a></li>
+          <li><a href="products.html?category=mehndi">Mehndi</a></li>
+          <li><a href="products.html?category=decor">Decoration</a></li>
+          <li><a href="products.html?category=baraat">Baraat</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="footer-heading">Services</h4>
+        <ul class="footer-links">
+          <li><a href="services.html?category=photographer">Photography</a></li>
+          <li><a href="services.html?category=decorator">Decoration</a></li>
+          <li><a href="services.html?category=catering">Catering</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="footer-heading">Account</h4>
+        <ul class="footer-links">
+          <li><a href="auth.html">Login</a></li>
+          <li><a href="auth.html?tab=signup">Register</a></li>
+          <li><a href="dashboard.html">Dashboard</a></li>
+          <li><a href="orders.html">My Orders</a></li>
+          <li><a href="cart.html">Cart</a></li>
+          <li><a href="auth.html?tab=admin">Admin</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2024 Shaadi Bazaar. Made in Pakistan.</p>
+      <p>Promo codes: SHAADI10 · WEDDING20 · BARAT15</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toast-container"></div>
+
+<script src="js/config.js"></script>
+<script src="js/products.js"></script>
+<script src="js/services.js"></script>
+<script>
+  // Budget Calculator Logic
+  const budgetData = {
+    guests:  { 100: 1.0, 200: 1.8, 300: 2.5, 500: 3.8, 800: 5.5, 1000: 7.0 },
+    city:    { karachi: 1.2, lahore: 1.15, islamabad: 1.25, other: 1.0 },
+    venue:   { home: 0.8, hall: 1.0, hotel: 1.8 },
+    events:  { 2: 0.75, 3: 1.0, 4: 1.2, 5: 1.5 }
+  };
+
+  const baseCategories = {
+    'Catering':    15000,
+    'Decoration':  20000,
+    'Photography': 35000,
+    'Bridal Dress': 60000,
+    'Jewellery':   30000,
+    'Baraat':      10000
+  };
+
+  function calcBudget() {
+    const guests = document.getElementById('calc-guests').value;
+    const city   = document.getElementById('calc-city').value;
+    const venue  = document.getElementById('calc-venue').value;
+    const events = document.getElementById('calc-events').value;
+
+    const multiplier = budgetData.guests[guests] * budgetData.city[city] *
+                       budgetData.venue[venue]  * budgetData.events[events];
+
+    let total = 0;
+    const breakdown = document.getElementById('budget-breakdown');
+
+    breakdown.innerHTML = Object.entries(baseCategories).map(([cat, base]) => {
+      const amount = Math.round(base * multiplier / 1000) * 1000;
+      total += amount;
+      return `<div class="budget-line"><span>${cat}</span><span>${formatPrice(amount)}</span></div>`;
+    }).join('');
+
+    document.getElementById('budget-total-amount').textContent = formatPrice(total);
+  }
+
+  calcBudget();
+</script>
+</body>
+</html>

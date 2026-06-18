@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Service Detail — Shaadi Bazaar</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/products.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    /* Booking Success Overlay styles */
+    .hidden-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(13, 5, 5, 0.9);
+      z-index: 10000;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(12px);
+    }
+    .hidden-overlay.show {
+      display: flex;
+    }
+    
+    .booking-success-card {
+      background: #1a0808;
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7), 0 0 30px rgba(212, 175, 55, 0.15);
+      border-radius: 24px;
+      padding: 3rem 2rem;
+      text-align: center;
+      max-width: 480px;
+      width: 90%;
+      animation: zoomIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    @keyframes zoomIn {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .success-icon-wrap {
+      width: 90px;
+      height: 90px;
+      background: rgba(212, 175, 55, 0.08);
+      border: 2px solid var(--gold);
+      border-radius: 50%;
+      margin: 0 auto 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      animation: scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    @keyframes scaleIn {
+      0% { transform: scale(0); box-shadow: 0 0 0 rgba(212,175,55,0); }
+      100% { transform: scale(1); box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); }
+    }
+
+    .checkmark-svg {
+      width: 44px;
+      height: 44px;
+      fill: none;
+      stroke: var(--gold);
+      stroke-width: 4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 100;
+      stroke-dashoffset: 100;
+      animation: drawCheck 0.8s 0.3s ease-out forwards;
+    }
+
+    @keyframes drawCheck {
+      to { stroke-dashoffset: 0; }
+    }
+
+    .booking-success-card h2 {
+      color: var(--gold);
+      font-size: 1.8rem;
+      margin-bottom: 0.75rem;
+      font-family: var(--font-heading, serif);
+    }
+
+    .highlight-text {
+      color: var(--text);
+      font-size: 1.15rem;
+      font-weight: 500;
+      line-height: 1.5;
+      margin-bottom: 2rem;
+    }
+
+    .loading-ring-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: rgba(255, 248, 240, 0.55);
+      font-size: 0.85rem;
+    }
+
+    .loading-ring {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(212, 175, 55, 0.2);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body data-page="service-detail">
+
+<nav class="navbar">
+  <div class="container">
+    <a href="index.html" class="navbar-brand"><span class="brand-name">Shaadi Bazaar</span></a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="products.html">Products</a></li>
+      <li><a href="services.html" class="active">Services</a></li>
+      <li><a href="dashboard.html" id="nav-dashboard-link" style="display:none">Dashboard</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="cart.html" class="nav-cart-btn">Cart<span class="cart-badge" style="display:none">0</span></a>
+      <a href="auth.html" class="btn-nav-login" id="nav-login-btn">Login</a>
+      <button class="btn-nav-login" id="nav-logout-btn" style="display:none;background:transparent;border:1px solid var(--gold);color:var(--gold)">Logout</button>
+    </div>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<main>
+<div class="page-header">
+  <div class="container">
+    <h1 id="service-title">Loading...</h1>
+    <div class="breadcrumb"><a href="index.html">Home</a> › <a href="services.html">Services</a> › Detail</div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="product-detail-section">
+    <div class="product-detail-grid">
+      <div class="product-images">
+        <img id="service-img" src="https://via.placeholder.com/600x450" alt="Service" class="main-image">
+      </div>
+
+      <div class="product-info">
+        <div class="product-category-tag" id="service-category">Loading...</div>
+        <h2 id="service-title-h2" style="display:none"></h2>
+        <p class="service-provider" style="font-size:1rem;margin-bottom:0.5rem">Provider: <strong id="service-provider"></strong></p>
+        <p style="color:var(--gray-500);margin-bottom:1rem" id="service-city">City</p>
+        <div class="product-rating-row" style="margin-bottom:1rem">
+          <div id="service-rating"></div>
+        </div>
+        <div class="product-detail-price" id="service-price">Rs. 0<small>/day</small></div>
+        <p class="product-detail-desc" id="service-desc">Loading description...</p>
+
+        <!-- Booking Form -->
+        <div style="background:var(--gray-100);padding:1.5rem;border-radius:var(--radius-lg);margin-top:1.5rem">
+          <h3 style="margin-bottom:1rem;color:var(--maroon)">Book This Service</h3>
+          <form id="booking-form">
+            <div class="form-group">
+              <label class="form-label">Event Date *</label>
+              <input type="date" id="event-date" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Time Slot *</label>
+              <select id="time-slot" class="form-control" required>
+                <option value="">Select time slot</option>
+                <option value="morning">Morning (8AM - 12PM)</option>
+                <option value="afternoon">Afternoon (12PM - 4PM)</option>
+                <option value="evening">Evening (4PM - 8PM)</option>
+                <option value="night">Night (8PM - 12AM)</option>
+                <option value="full-day">Full Day</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Special Notes</label>
+              <textarea id="booking-notes" class="form-control" rows="3" placeholder="Any special requirements..."></textarea>
+            </div>
+            <div class="flex-between mb-2" style="font-weight:600">
+              <span>Price per day:</span>
+              <span id="booking-price-preview" style="color:var(--maroon)">-</span>
+            </div>
+            <div class="flex-between mb-3" style="font-weight:700;font-size:1.1rem;border-top:1px solid var(--gray-200);padding-top:0.75rem">
+              <span>Total:</span>
+              <span id="booking-total" style="color:var(--maroon);font-family:var(--font-heading)">-</span>
+            </div>
+            <button type="submit" class="btn btn-gold btn-full btn-lg" id="book-now-btn">
+              Book Now
+            </button>
+            <p class="text-muted text-small text-center mt-2">Login required to book</p>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Service Reviews -->
+    <div class="reviews-section">
+      <h2 style="margin-bottom:1.5rem">Customer Reviews</h2>
+      <div class="reviews-grid" id="service-reviews-grid"></div>
+    </div>
+  </div>
+</div>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom" style="border-top:none;padding-top:0">
+      <p>© 2024 Shaadi Bazaar</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Booking Modal -->
+<div class="modal-overlay hidden" id="booking-modal" style="display: none;">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 style="color: var(--maroon-dark); font-family: var(--font-heading, serif); margin: 0; font-size: 1.5rem;">Book Service</h3>
+      <span class="modal-close" onclick="closeBookingModal()">&times;</span>
+    </div>
+    <form id="modal-booking-form">
+      <input type="hidden" id="modal-service-id">
+      <input type="hidden" id="modal-service-price">
+      
+      <div class="form-group" style="margin-bottom: 1.25rem;">
+        <label class="form-label" style="font-weight: 600; display: block; margin-bottom: 0.5rem;">Name *</label>
+        <input type="text" id="modal-user-name" class="form-control" placeholder="Enter your name" required style="width: 100%; padding: 0.75rem; border-radius: var(--radius-md); border: 1px solid var(--gray-300);">
+      </div>
+
+      <div class="form-group" style="margin-bottom: 1.25rem;">
+        <label class="form-label" style="font-weight: 600; display: block; margin-bottom: 0.5rem;">Phone Number *</label>
+        <input type="text" id="modal-user-phone" class="form-control" placeholder="Enter phone number" required style="width: 100%; padding: 0.75rem; border-radius: var(--radius-md); border: 1px solid var(--gray-300);">
+      </div>
+
+      <div class="form-group" style="margin-bottom: 1.25rem;">
+        <label class="form-label" style="font-weight: 600; display: block; margin-bottom: 0.5rem;">Event Date *</label>
+        <input type="date" id="modal-event-date" class="form-control" required style="width: 100%; padding: 0.75rem; border-radius: var(--radius-md); border: 1px solid var(--gray-300);">
+      </div>
+
+      <div class="form-group" style="margin-bottom: 1.25rem;">
+        <label class="form-label" style="font-weight: 600; display: block; margin-bottom: 0.5rem;">Time Slot *</label>
+        <select id="modal-time-slot" class="form-control" required style="width: 100%; padding: 0.75rem; border-radius: var(--radius-md); border: 1px solid var(--gray-300);">
+          <option value="">Select time slot</option>
+          <option value="morning">Morning (8AM - 12PM)</option>
+          <option value="afternoon">Afternoon (12PM - 4PM)</option>
+          <option value="evening">Evening (4PM - 8PM)</option>
+          <option value="night">Night (8PM - 12AM)</option>
+          <option value="full-day">Full Day</option>
+        </select>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 1.5rem;">
+        <label class="form-label" style="font-weight: 600; display: block; margin-bottom: 0.5rem;">Address *</label>
+        <textarea id="modal-user-address" class="form-control" rows="3" placeholder="Enter event address" required style="width: 100%; padding: 0.75rem; border-radius: var(--radius-md); border: 1px solid var(--gray-300); resize: none;"></textarea>
+      </div>
+
+      <div style="border-top: 1px solid var(--gray-200); padding-top: 1rem; display: flex; justify-content: flex-end; gap: 0.75rem;">
+        <button type="button" class="btn btn-outline" onclick="closeBookingModal()" style="border-color: var(--gray-300); color: var(--gray-700);">Cancel</button>
+        <button type="submit" class="btn btn-gold" id="modal-book-btn" style="background: var(--gold); color: var(--white); font-weight: 600; border: none; padding: 0.5rem 1.25rem; border-radius: var(--radius-md); cursor: pointer;">Book Now</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Booking Success Overlay Modal -->
+<div id="booking-success-overlay" class="hidden-overlay">
+  <div class="booking-success-card">
+    <div class="success-icon-wrap">
+      <svg class="checkmark-svg" viewBox="0 0 52 52">
+        <circle cx="26" cy="26" r="25" fill="none"/>
+        <path fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+      </svg>
+    </div>
+    <h2>Booking Confirmed!</h2>
+    <p class="highlight-text">Your booking is done. We will contact you shortly.</p>
+    <div class="loading-ring-wrap">
+      <div class="loading-ring"></div>
+      <span>Redirecting to Dashboard...</span>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container"></div>
+<script src="js/config.js"></script>
+<script src="js/services.js"></script>
+</body>
+</html>

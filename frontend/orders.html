@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Orders — Shaadi Bazaar</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/cart.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body data-page="orders">
+
+<nav class="navbar">
+  <div class="container">
+    <a href="index.html" class="navbar-brand"><span class="brand-name">Shaadi Bazaar</span></a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="products.html">Products</a></li>
+      <li><a href="dashboard.html">Dashboard</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="cart.html" class="nav-cart-btn">Cart<span class="cart-badge" style="display:none">0</span></a>
+      <button class="btn-nav-login" id="nav-logout-btn" style="background:transparent;border:1px solid var(--gold);color:var(--gold)">Logout</button>
+    </div>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<main>
+<div class="page-header">
+  <div class="container">
+    <h1>My Orders</h1>
+    <p>Track all your wedding product orders</p>
+    <div class="breadcrumb"><a href="index.html">Home</a> › <a href="dashboard.html">Dashboard</a> › Orders</div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="orders-section">
+    <div id="orders-container">
+      <div class="spinner"></div>
+    </div>
+  </div>
+</div>
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom" style="border-top:none;padding-top:0">
+      <p>© 2024 Shaadi Bazaar</p>
+    </div>
+  </div>
+</footer>
+
+<div class="toast-container"></div>
+<script src="js/config.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  const user = requireAuth();
+  if (!user) return;
+  await loadMyOrders(user.id);
+});
+
+async function loadMyOrders(userId) {
+  const container = document.getElementById('orders-container');
+  try {
+    const data = await apiCall('/orders/my-orders');
+    const orders = data.orders || [];
+    if (orders.length === 0) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <h3>No orders yet</h3>
+          <p>Start shopping for your wedding!</p>
+          <a href="products.html" class="btn btn-primary">Shop Now</a>
+        </div>`;
+      return;
+    }
+    container.innerHTML = `<div class="orders-list">${orders.map(order => `
+      <div class="order-card">
+        <div class="order-card-header">
+          <div>
+            <div class="order-id">Order <strong>#${order.id.slice(0,8).toUpperCase()}</strong></div>
+            <div class="order-date">${formatDate(order.created_at)}</div>
+          </div>
+          <div style="display:flex;gap:0.75rem;align-items:center">
+            <span class="badge badge-gold">${order.payment_method.toUpperCase()}</span>
+            ${statusBadge(order.status)}
+          </div>
+        </div>
+        <div class="order-card-body">
+          <div class="order-items-list">
+            ${(order.order_items||[]).map(item=>`
+              <div class="order-item">
+                <img src="${item.products?.image_url||'https://via.placeholder.com/50'}" alt="${item.products?.name}">
+                <div class="order-item-info">
+                  <h5>${item.products?.name||'Product'}</h5>
+                  <p>Qty: ${item.quantity} × ${formatPrice(item.price)}</p>
+                </div>
+              </div>`).join('')}
+          </div>
+        </div>
+        <div class="order-card-footer">
+          <div class="text-muted text-small">${order.city}</div>
+          <div class="order-total">${formatPrice(order.total_amount)}</div>
+        </div>
+      </div>`).join('')}</div>`;
+  } catch (err) {
+    container.innerHTML = '<p class="text-muted text-center">Failed to load orders. Please login.</p>';
+  }
+}
+</script>
+</body>
+</html>
