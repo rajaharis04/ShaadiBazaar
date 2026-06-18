@@ -7,7 +7,7 @@ const SUPABASE_URL = 'https://tvaasweoknmymxfbgvix.supabase.co';       // e.g. h
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR2YWFzd2Vva25teW14ZmJndml4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzNzUwOTEsImV4cCI6MjA5Njk1MTA5MX0.4SifqADtMsMvvmUx5XCoYgeoh5HD57UovnRlXBs71-k';  // from Project Settings > API
 
 // Backend API base URL
-const API_BASE = 'https://shaadibazaar-production.up.railway.app/api';  // Change to Render URL for production
+const API_BASE = 'https://shaadibazaar-production-3275.up.railway.app/api';  // Change to Render URL for production
 
 // ============================================================
 // Initialize Supabase Client
