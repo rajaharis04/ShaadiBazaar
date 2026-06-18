@@ -1,0 +1,33 @@
+# ============================================================
+# SHAADI BAZAAR — ENVIRONMENT VARIABLES
+# ============================================================
+
+# Server
+PORT=5000
+NODE_ENV=development
+
+# Supabase (Get these from: https://supabase.com → Project Settings → API)
+SUPABASE_URL=https://tvaasweoknmymxfbgvix.supabase.co
+SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR2YWFzd2Vva25teW14ZmJndml4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzNzUwOTEsImV4cCI6MjA5Njk1MTA5MX0.4SifqADtMsMvvmUx5XCoYgeoh5HD57UovnRlXBs71-k
+SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR2YWFzd2Vva25teW14ZmJndml4Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MTM3NTA5MSwiZXhwIjoyMDk2OTUxMDkxfQ.G0xZwmWTXJFtxtLk8aFk92zUC_k_NlgLpbWftnRjouA
+
+# JWT Secret
+JWT_SECRET=shaadi_bazaar_super_secret_jwt_key_2024
+
+# Frontend URL (for CORS)
+FRONTEND_URL=http://localhost:3000
+
+# ============================================================
+# ADMIN CREDENTIALS (Fixed — do not change)
+# ============================================================
+ADMIN_EMAIL=admin@shaadibazaar.pk
+ADMIN_PASSWORD=Admin@123!
+
+# ============================================================
+# EMAIL (for OTP sending via Gmail SMTP)
+# 1. Use your Gmail address
+# 2. For EMAIL_PASS: go to Google Account → Security → App Passwords
+#    Generate an App Password and paste it here (NOT your real password)
+# ============================================================
+EMAIL_USER=rajag24680@gmail.com
+EMAIL_PASS=xmhzupoxokzeyjek

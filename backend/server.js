@@ -20,7 +20,8 @@ app.use(cors({
     process.env.FRONTEND_URL || 'http://localhost:3000',
     'http://127.0.0.1:5500',
     'http://localhost:5500',
-    'https://shaadi-bazaar.netlify.app'
+    'https://shaadi-bazaar.netlify.app',
+    'https://shaadi-bazaar-1eiecepe4-rajaharis04s-projects.vercel.app'
   ],
   credentials: true
 }));
@@ -39,25 +40,25 @@ if (process.env.NODE_ENV === 'development') {
 // ============================================================
 // ROUTES
 // ============================================================
-const authRoutes     = require('./routes/auth.routes');
-const productRoutes  = require('./routes/product.routes');
-const serviceRoutes  = require('./routes/service.routes');
-const orderRoutes    = require('./routes/order.routes');
-const bookingRoutes  = require('./routes/booking.routes');
-const adminRoutes    = require('./routes/admin.routes');
+const authRoutes = require('./routes/auth.routes');
+const productRoutes = require('./routes/product.routes');
+const serviceRoutes = require('./routes/service.routes');
+const orderRoutes = require('./routes/order.routes');
+const bookingRoutes = require('./routes/booking.routes');
+const adminRoutes = require('./routes/admin.routes');
 const categoryRoutes = require('./routes/category.routes');
-const cartRoutes     = require('./routes/cart.routes');
-const reviewRoutes   = require('./routes/review.routes');
+const cartRoutes = require('./routes/cart.routes');
+const reviewRoutes = require('./routes/review.routes');
 
-app.use('/api/auth',       authRoutes);
-app.use('/api/products',   productRoutes);
-app.use('/api/services',   serviceRoutes);
-app.use('/api/orders',     orderRoutes);
-app.use('/api/bookings',   bookingRoutes);
-app.use('/api/admin',      adminRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/services', serviceRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/bookings', bookingRoutes);
+app.use('/api/admin', adminRoutes);
 app.use('/api/categories', categoryRoutes);
-app.use('/api/cart',       cartRoutes);
-app.use('/api/reviews',    reviewRoutes);
+app.use('/api/cart', cartRoutes);
+app.use('/api/reviews', reviewRoutes);
 
 // ============================================================
 // HEALTH CHECK
