@@ -21,7 +21,8 @@ app.use(cors({
     'http://127.0.0.1:5500',
     'http://localhost:5500',
     'https://shaadi-bazaar.netlify.app',
-    'https://shaadi-bazaar-1eiecepe4-rajaharis04s-projects.vercel.app'
+    'https://shaadi-bazaar-1eiecepe4-rajaharis04s-projects.vercel.app',
+    'https://shaadi-bazaar-fxms2r9vc-rajaharis04s-projects.vercel.app'  // naya URL
   ],
   credentials: true
 }));
